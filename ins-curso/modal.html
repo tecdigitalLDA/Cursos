@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Inscrição</title>
+    <link rel="stylesheet" href="../assets/css/main.css" /> <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .modal-body {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="date"],
+        .form-group input[type="tel"],
+        .form-group select,
+        .form-group input[type="file"] {
+            width: calc(100% - 20px);
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input[type="text"]:focus,
+        .form-group input[type="email"]:focus,
+        .form-group input[type="date"]:focus,
+        .form-group input[type="tel"]:focus,
+        .form-group select:focus,
+        .form-group input[type="file"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .file-upload-info {
+            font-size: 0.9em;
+            color: #777;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="modal-body">
+        <h2 id="modalTitle">Formulário de Inscrição</h2>
+        <form id="registrationForm">
+            <input type="hidden" id="cursoInscricao" name="cursoInscricao">
+
+            <div class="form-group">
+                <label for="nomeCompleto">Nome Completo:</label>
+                <input type="text" id="nomeCompleto" name="nomeCompleto" required>
+            </div>
+            <div class="form-group">
+                <label for="dataNascimento">Data de Nascimento:</label>
+                <input type="date" id="dataNascimento" name="dataNascimento" required>
+            </div>
+            <div class="form-group">
+                <label for="numeroBI">Nº do BI:</label>
+                <input type="text" id="numeroBI" name="numeroBI" required>
+            </div>
+            <div class="form-group">
+                <label for="morada">Morada:</label>
+                <input type="text" id="morada" name="morada" required>
+            </div>
+            <div class="form-group">
+                <label for="telefone">Telefone:</label>
+                <input type="tel" id="telefone" name="telefone" pattern="\d{9}" placeholder="Ex: 9xx xxx xxx" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="profissao">Profissão:</label>
+                <input type="text" id="profissao" name="profissao">
+            </div>
+            <div class="form-group">
+                <label for="nivelAcademico">Nível Acadêmico:</label>
+                <select id="nivelAcademico" name="nivelAcademico" required>
+                    <option value="">Selecione</option>
+                    <option value="Ensino Básico">Ensino Básico</option>
+                    <option value="Ensino Médio">Ensino Médio</option>
+                    <option value="Licenciatura">Licenciatura</option>
+                    <option value="Pós-Graduação">Pós-Graduação</option>
+                    <option value="Outro">Outro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="bilheteFile">Anexar Bilhete de Identidade (PDF ou Imagem):</label>
+                <input type="file" id="bilheteFile" name="bilheteFile" accept=".pdf,.jpg,.jpeg,.png" required>
+                <p class="file-upload-info">Tamanho máximo: 5MB</p>
+            </div>
+            <div class="form-group">
+                <label for="comprovativoFile">Anexar Comprovativo de Pagamento (PDF ou Imagem):</label>
+                <input type="file" id="comprovativoFile" name="comprovativoFile" accept=".pdf,.jpg,.jpeg,.png" required>
+                <p class="file-upload-info">Tamanho máximo: 5MB</p>
+            </div>
+
+            <button type="submit">Inscrever-me</button>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <script src="inscricao-curso.js"></script>
+</body>
+</html>
