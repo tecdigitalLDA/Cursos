@@ -11,19 +11,19 @@
     </noscript>
 
     <style>
-        /* Estilos básicos para o modal (você pode ajustar no seu main.css) */
+        /* Estilos para o modal de Inscrição */
         .modal {
-            display: none; /* Escondido por padrão */
-            position: fixed; /* Fica por cima de tudo */
-            z-index: 1000; /* Z-index alto para garantir que esteja na frente */
+            display: none;
+            position: fixed;
+            z-index: 1000;
             left: 0;
             top: 0;
-            width: 100%; /* Largura total */
-            height: 100%; /* Altura total */
-            overflow: auto; /* Habilita scroll se o conteúdo for muito grande */
-            background-color: rgba(0,0,0,0.4); /* Fundo semi-transparente preto */
-            justify-content: center; /* Centraliza o conteúdo horizontalmente */
-            align-items: center; /* Centraliza o conteúdo verticalmente */
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
         }
 
         .modal-content {
@@ -31,15 +31,14 @@
             margin: auto;
             padding: 0px;
             border: 0px solid #888;
-            width: 98%; /* Pode ajustar a largura do modal */
-            max-width: 480px; /* Largura máxima */
+            width: 98%;
+            max-width: 480px;
             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
             animation-name: animatetop;
             animation-duration: 0.4s;
             position: relative;
         }
 
-        /* Animação para o modal */
         @keyframes animatetop {
             from {top: -300px; opacity: 0}
             to {top: 0; opacity: 1}
@@ -50,17 +49,86 @@
             float: right;
             font-size: 28px;
             font-weight: bold;
-            position: absolute; /* Posiciona o botão de fechar */
+            position: absolute;
             top: 10px;
             right: 20px;
+            cursor: pointer;
         }
 
         .close-button:hover,
         .close-button:focus {
             color: black;
             text-decoration: none;
-            cursor: pointer;
         }
+        
+        /* Estilos para o Popup do Carrossel de Imagens */
+        .image-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1001; /* Z-index maior para ficar sobre o outro modal se necessário */
+            align-items: center;
+            justify-content: center;
+        }
+
+        .popup-content {
+            position: relative;
+            width: 90%;
+            height: 90%;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #popupImage {
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+            z-index: 1002;
+        }
+
+        .close-popup:hover,
+        .close-popup:focus {
+            color: #bbb;
+        }
+
+        .prev-image,
+        .next-image {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: auto;
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            transition: 0.3s;
+            border-radius: 3px;
+            user-select: none;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .prev-image { left: 10px; }
+        .next-image { right: 10px; }
+        .prev-image:hover, .next-image:hover { background-color: rgba(0, 0, 0, 0.8); }
     </style>
 </head>
 
@@ -69,252 +137,172 @@
     <div id="wrapper" class="fade-in">
 
         <div id="intro">
-
-            <h1>TecDigital<br />
-                Sul LDA</h1>
-            <p> A cada aula  <a href="./ins-curso/modal.html">e</a>  cada curso <a
-                    href="./ins-curso/modal.html"> </a><br />
-                TecDigital<a href="./ins-curso/modal.html">Juntos realimos seus sonhos</a>.
-            </p>
+            <h1>TecDigital<br />Sul LDA</h1>
+            <p> A cada aula e cada curso, a TecDigital realiza os seus sonhos consigo.</p>
             <ul class="actions">
                 <li><a href="#header" class="button icon solid solo fa-arrow-down scrolly">Continue</a></li>
             </ul>
         </div>
-
-        <header id="header">
-            <a href="index.html" class="logo">TecDigital</a>
-        </header>
-
+        <header id="header"><a href="index.html" class="logo">TecDigital</a></header>
         <nav id="nav">
             <ul class="links">
                 <li class="active"><a href="index.html">Home</a></li>
                 <li><a href="somostecdigital.html">Quem Somos</a></li>
-                <!-- <li><a href="contactotecdigital.html">Faça Curso Aqui</a></li> -->
             </ul>
-
             <ul class="icons">
-                <li><a href="https://www.linkedin.com/in/tec-digital-3b6370263/" class="icon brands fa-linkedin"><span
-                                class="label">Linkedin</span></a></li>
-                <li><a href="https://www.facebook.com/p/Tec-Digital-SU-LDA-100087834732969/"
-                        class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-                <li><a href="https://www.instagram.com/tecdigitalsulda/" class="icon brands fa-instagram"><span
-                                class="label">Instagram</span></a></li>
-                <li><a href="https://github.com/tecdigitalLDA" class="icon brands fa-github"><span
-                                class="label">GitHub</span></a></li>
+                <li><a href="https://www.linkedin.com/in/tec-digital-3b6370263/" class="icon brands fa-linkedin"><span class="label">Linkedin</span></a></li>
+                <li><a href="https://www.facebook.com/p/Tec-Digital-SU-LDA-100087834732969/" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+                <li><a href="https://www.instagram.com/tecdigitalsulda/" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+                <li><a href="https://github.com/tecdigitalLDA" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
             </ul>
         </nav>
 
         <div id="main">
-
             <article class="post featured">
                 <header class="major">
-                    <h2><a href="#">Esta é uma<br />
-                           grande manchete</a></h2>
-                    <p>A transformação começa com uma decisão, e esses jovens decidiram investir no seu futuro.
-                        Participe você também dos cursos da TecDigital e junte-se a uma geração que está a mudar o jogo.
-                        São formações práticas, rápidas e com certificado reconhecido. Muitos dos nossos alunos já estão
-                        empregados ou a empreender na área.</p>
+                    <h2><a href="#">Esta é uma<br />grande manchete</a></h2>
+                    <p>A transformação começa com uma decisão, e esses jovens decidiram investir no seu futuro. Participe você também dos cursos da TecDigital e junte-se a uma geração que está a mudar o jogo. São formações práticas, rápidas e com certificado reconhecido. Muitos dos nossos alunos já estão empregados ou a empreender na área.</p>
                 </header>
-                <a href="#" class="image main"><img src="images/img1.jpg" alt="" /></a>
+                <a href="#" class="image main course-image"><img src="images/img1.jpg" alt="" /></a>
                 <ul class="actions special">
                     <li><a href="#" class="button large open-modal-btn" data-course-name="Inscrição Geral">Me inscrever</a></li>
                 </ul>
             </article>
 
             <section class="posts">
-                <!-- Artigo Curso de Excel Avancado -->
                 <article>
                     <header>
-                        <h2><a href="#">Curso<br />
-                                Excel Avançado</a></h2>
+                        <h2><a href="#">Curso<br />Excel Avançado</a></h2>
                     </header>
-                    <a href="#" class="image fit"><img src="images/cursos/Prancheta 1 CURSO AVANÇADO DE EXCEL.jpg"
-                            alt="" /></a>
-                    <p>Domine o Excel e transforme sua carreira!
-                        Se você já sabe o básico, está na hora de ir além!
-                        Aprenda a criar dashboards, usar fórmulas poderosas, automatizar tarefas e impressionar no
-                        mercado de trabalho.
-                        <br />
-                        📊 Curso 100% prático<br />
+                    <a href="#" class="image fit course-image"><img src="images/cursos/Prancheta 1 CURSO AVANÇADO DE EXCEL.jpg" alt="" /></a>
+                    <p>Domine o Excel e transforme sua carreira! Aprenda a criar dashboards, usar fórmulas poderosas, automatizar tarefas e impressionar no mercado de trabalho.<br />
+                        📋 Curso 100% prático<br />
                         🎓 Certificado incluído<br />
-                        🔥 Vagas limitadas
-                    </p>
+                        🔥 Vagas limitadas</p></p>
                     <ul class="actions special">
                         <li><a href="#" class="button open-modal-btn" data-course-name="Excel Avançado">Me inscrever</a></li>
                     </ul>
                 </article>
 
-                <!-- Artigo Curso de Importacao -->
                 <article>
                     <header>
-                        <h2><a href="#">Curso<br />
-                                IMPORTAÇÃO</a></h2>
+                        <h2><a href="#">Curso<br />IMPORTAÇÃO</a></h2>
                     </header>
-                    <a href="#" class="image fit"><img src="images/cursos/Prancheta 3 CURSO DE IMPORTAÇÃO.jpg"
-                            alt="" /></a>
-                    <p>Domine a Contabilidade no Primavera e transforme sua carreira!
-                        Se você já tem noções de contabilidade, está na hora de se destacar!
-                        Aprenda a operar no software Primavera, lançar documentos, gerar relatórios financeiros, gerir
-                        contas e muito mais — com foco total na prática do mercado angolano.<br />
-                        💻 Curso 100% prático<br />
+                    <a href="#" class="image fit course-image"><img src="images/cursos/Prancheta 3 CURSO DE IMPORTAÇÃO.jpg" alt="" /></a>
+                    <p>Domine a Contabilidade no Primavera e transforme sua carreira! Aprenda a operar no software, lançar documentos, gerar relatórios e muito mais.<br />
+                        📋 Curso 100% prático<br />
                         🎓 Certificado incluído<br />
-                        🔥 Vagas limitadas</p>
+                        🔥 Vagas limitadas</p></p>
                     <ul class="actions special">
                         <li><a href="#" class="button open-modal-btn" data-course-name="Importação">Me inscrever</a></li>
                     </ul>
                 </article>
 
-                  <!-- Artigo Curso de Contabilidade Geral -->
                 <article>
                     <header>
-                        <h2><a href="#">Curso<br />
-                                Contabilidade Geral</a></h2>
+                        <h2><a href="#">Curso<br />Contabilidade Geral</a></h2>
                     </header>
-                    <a href="#" class="image fit"><img src="images/cursos/Prancheta 2 CURSO DE CONTABILIDADE.jpg"
-                            alt="" /></a>
-                    <p>Entende de números, manda nos resultados!
-                        Domina as finanças, os impostos e os relatórios com confiança.
-                        Este curso vai dar-te as ferramentas certas para atuar no mundo real seja em empresas, negócios
-                        próprios ou como profissional independente.<br />
-                        🧾 Aprende contabilidade na prática<br />
-                        📊 Entende a fiscalidade sem complicações<br />
-                        🎓 Ganha certificado e destaque<br />
-                        ✅ Inscreva-se agora e comece a construir uma carreira sólida em contabilidade!</p>
+                    <a href="#" class="image fit course-image"><img src="images/cursos/Prancheta 2 CURSO DE CONTABILIDADE.jpg" alt="" /></a>
+                    <p>Entende de números, manda nos resultados! Domina as finanças, os impostos e os relatórios com confiança. Ganha certificado e destaque.<br />
+                        📋 Curso 100% prático<br />
+                        🎓 Certificado incluído<br />
+                        🔥 Vagas limitadas</p></p>
                     <ul class="actions special">
                         <li><a href="#" class="button open-modal-btn" data-course-name="Contabilidade Geral">Me inscrever</a></li>
                     </ul>
                 </article>
 
-                <!-- Artigo Curso de  Gestão de Recursos Humanos -->
                 <article>
                     <header>
-                        <h2><a href="#">Curso<br />
-                                Gestão de Recursos Humanos</a></h2>
+                        <h2><a href="#">Curso<br />Gestão de Recursos Humanos</a></h2>
                     </header>
-                    <a href="#" class="image fit"><img src="images/cursos/Prancheta 4 CURSO DE RECURSOS HUMANOS.jpg"
-                            alt="" /></a>
-                    <p>Domine a Gestão de Recursos Humanos e lidere com excelência!
-                        Aprenda a recrutar, selecionar, formar, avaliar e motivar talentos dentro das organizações.
-                        Entenda as leis laborais, folha de salário, clima organizacional e muito mais.
-                        Perfeito para quem deseja entrar na área ou subir de nível na carreira.<br />
+                    <a href="#" class="image fit course-image"><img src="images/cursos/Prancheta 4 CURSO DE RECURSOS HUMANOS.jpg" alt="" /></a>
+                    <p>Aprenda a recrutar, selecionar, formar, avaliar e motivar talentos. Entenda as leis laborais, folha de salário, clima organizacional e muito mais.<br />
                         📋 Curso 100% prático<br />
                         🎓 Certificado incluído<br />
-                        🔥 Vagas limitadas</p>
+                        🔥 Vagas limitadas</p></p>
                     <ul class="actions special">
                         <li><a href="#" class="button open-modal-btn" data-course-name="Gestão de Recursos Humanos">Me inscrever</a></li>
                     </ul>
                 </article>
 
-                <!-- Artigo Curso de  Marketing Digital -->
                 <article>
                     <header>
-                        <h2><a href="#">Curso<br />
-                                Marketing Digital</a></h2>
+                        <h2><a href="#">Curso<br />Marketing Digital</a></h2>
                     </header>
-                    <a href="#" class="image fit"><img src="images/cursos/Prancheta 8 CURSO DE MARKETING DIGITAL.jpg" alt="" /></a>
-                    <p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque
-                        venenatis dolor imperdiet dolor mattis sagittis magna etiam.</p>
+                    <a href="#" class="image fit course-image"><img src="images/cursos/Prancheta 8 CURSO DE MARKETING DIGITAL.jpg" alt="" /></a>
+                    <p>Descubra como funcionam os algoritmos, análise de métricas, criação de campanhas virais, tráfego pago e orgânico. Torne-se um profissional requisitado.<br />
+                        📋 Curso 100% prático<br />
+                        🎓 Certificado incluído<br />
+                        🔥 Vagas limitadas</p></p>
                     <ul class="actions special">
                         <li><a href="#" class="button open-modal-btn" data-course-name="Marketing Digital">Me inscrever</a></li>
                     </ul>
                 </article>
 
-                <!-- Artigo Curso de Trader -->
                 <article>
                     <header>
-                        <h2><a href="#">Curso<br />
-                                Trader</a></h2>
+                        <h2><a href="#">Curso<br />Trader</a></h2>
                     </header>
-                    <a href="#" class="image fit"><img src="images/cursos/Prancheta 5 CURSO DE TRADER.jpg" alt="" /></a>
-                    <p>Aprenda a ser um Trader Profissional e invista com confiança!
-                        Descubra como funciona o mercado financeiro, análise técnica, leitura de gráficos, gerenciamento
-                        de risco e estratégias de compra e venda. Comece do zero e avance passo a passo rumo à liberdade
-                        financeira.<br />
+                    <a href="#" class="image fit course-image"><img src="images/cursos/Prancheta 5 CURSO DE TRADER.jpg" alt="" /></a>
+                    <p>Descubra como funciona o mercado financeiro, análise técnica, leitura de gráficos, gerenciamento de risco e estratégias de compra e venda.<br />
                         📋 Curso 100% prático<br />
                         🎓 Certificado incluído<br />
-                        🔥 Vagas limitadas</p>
+                        🔥 Vagas limitadas</p></p>
                     <ul class="actions special">
                         <li><a href="#" class="button open-modal-btn" data-course-name="Trader">Me inscrever</a></li>
                     </ul>
                 </article>
 
-                   <!-- Artigo Curso de Programação -->
                 <article>
                     <header>
-                        <h2><a href="#">Curso<br />
-                                Programação</a></h2>
+                        <h2><a href="#">Curso<br />Programação</a></h2>
                     </header>
-                    <a href="#" class="image fit"><img src="images/cursos/Prancheta 6 CURSO DE PROGRAMAÇÃO.jpg" alt="" /></a>
-                    <p>Aprenda a ser um Trader Profissional e invista com confiança!
-                        Descubra como funciona o mercado financeiro, análise técnica, leitura de gráficos, gerenciamento
-                        de risco e estratégias de compra e venda. Comece do zero e avance passo a passo rumo à liberdade
-                        financeira.<br />
+                    <a href="#" class="image fit course-image"><img src="images/cursos/Prancheta 6 CURSO DE PROGRAMAÇÃO.jpg" alt="" /></a>
+                    <p>Aprenda a criar websites, aplicações e sistemas do zero. Domine as linguagens e tecnologias mais procuradas no mercado de trabalho.<br />
                         📋 Curso 100% prático<br />
                         🎓 Certificado incluído<br />
-                        🔥 Vagas limitadas</p>
+                        🔥 Vagas limitadas</p></p>
                     <ul class="actions special">
-                        <li><a href="#" class="button open-modal-btn" data-course-name="Trader">Me inscrever</a></li>
+                        <li><a href="#" class="button open-modal-btn" data-course-name="Programação">Me inscrever</a></li>
                     </ul>
                 </article>
 
-                  <!-- Artigo Curso de Programação -->
                 <article>
                     <header>
-                        <h2><a href="#">Curso<br />
-                                Maquiagem</a></h2>
+                        <h2><a href="#">Curso<br />Maquiagem</a></h2>
                     </header>
-                    <a href="#" class="image fit"><img src="images/cursos/Prancheta 7 CURSO DE MAQUIAGEM.jpg" alt="" /></a>
-                    <p>Aprenda a ser um Trader Profissional e invista com confiança!
-                        Descubra como funciona o mercado financeiro, análise técnica, leitura de gráficos, gerenciamento
-                        de risco e estratégias de compra e venda. Comece do zero e avance passo a passo rumo à liberdade
-                        financeira.<br />
+                    <a href="#" class="image fit course-image"><img src="images/cursos/Prancheta 7 CURSO DE MAQUIAGEM.jpg" alt="" /></a>
+                    <p>Transforme a sua paixão em profissão. Aprenda desde as técnicas básicas de preparação de pele até às maquilhagens mais elaboradas para eventos.<br />
                         📋 Curso 100% prático<br />
                         🎓 Certificado incluído<br />
-                        🔥 Vagas limitadas</p>
+                        🔥 Vagas limitadas</p></p>
                     <ul class="actions special">
-                        <li><a href="#" class="button open-modal-btn" data-course-name="Trader">Me inscrever</a></li>
+                        <li><a href="#" class="button open-modal-btn" data-course-name="Maquiagem">Me inscrever</a></li>
                     </ul>
                 </article>
 
-
-                  <!-- Artigo Curso de Aplicação de Pirucas -->
                 <article>
                     <header>
-                        <h2><a href="#">Curso<br />
-                               Aplicação de Pirucas</a></h2>
+                        <h2><a href="#">Curso<br />Aplicação de Perucas</a></h2>
                     </header>
-                    <a href="#" class="image fit"><img src="images/cursos/Prancheta 9 CURSO DE APLICAÇÃO DE PERUCAS.jpg" alt="" /></a>
-                    <p>Aprenda a ser um Trader Profissional e invista com confiança!
-                        Descubra como funciona o mercado financeiro, análise técnica, leitura de gráficos, gerenciamento
-                        de risco e estratégias de compra e venda. Comece do zero e avance passo a passo rumo à liberdade
-                        financeira.<br />
+                    <a href="#" class="image fit course-image"><img src="images/cursos/Prancheta 9 CURSO DE APLICAÇÃO DE PERUCAS.jpg" alt="" /></a>
+                    <p>Aprenda as técnicas profissionais para aplicação e manutenção de perucas, desde a preparação do cabelo até ao acabamento perfeito.<br />
                         📋 Curso 100% prático<br />
                         🎓 Certificado incluído<br />
-                        🔥 Vagas limitadas</p>
+                        🔥 Vagas limitadas</p></p>
                     <ul class="actions special">
-                        <li><a href="#" class="button open-modal-btn" data-course-name="Trader">Me inscrever</a></li>
+                        <li><a href="#" class="button open-modal-btn" data-course-name="Aplicação de Perucas">Me inscrever</a></li>
                     </ul>
                 </article>
-
             </section>
-
-            <footer>
-                <div class="pagination">
-                    <a href="#" class="page active">1</a>
-                    <a href="#" class="page">2</a>
-                
-                    <span class="extra">&hellip;</span>
-                    <a href="#" class="page">8</a>
-                    <a href="#" class="page">7</a>
-                    <a href="#" class="next">Próximo</a>
-                </div>
-            </footer>
-
         </div>
 
-        <footer id="footer">
+
+       <!-- Footer -->
+          <footer id="footer">
             <section>
-                <form method="post" action="#">
+                <formid="contactForm" method="post" action="#">
                     <div class="fields">
                         <div class="field">
                             <label for="name">Nome</label>
@@ -363,21 +351,23 @@
                 </section>
             </section>
         </footer>
-
         <div id="copyright">
-            <ul>
-                <li>&copy; Todos os direitos reservados</li>
-                <li> <a href="https://www.facebook.com/p/Tec-Digital-SU-LDA-100087834732969/">TecDigital Sul LDA</a></li>
-            </ul>
+            <ul><li>&copy; Todos os direitos reservados</li><li><a href="#">TecDigital Sul LDA</a></li></ul>
         </div>
-
     </div>
 
-    <!-- Codigo HTML Do Modal -->
     <div id="inscriptionModal" class="modal">
         <div class="modal-content">
-            <span class="close-button">&times;</span>         
-            <iframe id="modalIframe" src="" frameborder="0" style="width: 100%; height: 500px;"></iframe>
+            <span class="close-button">&times;</span>
+            <iframe id="modalIframe" src="" frameborder="0" style="width: 100%; height: 600px;"></iframe>
+        </div>
+    </div>
+    <div id="imagePopup" class="image-popup">
+        <span class="close-popup">&times;</span>
+        <div class="popup-content">
+            <button class="prev-image">&lt;</button>
+            <img id="popupImage" src="" alt="Imagem do Curso">
+            <button class="next-image">&gt;</button>
         </div>
     </div>
 
@@ -388,57 +378,94 @@
     <script src="assets/js/breakpoints.min.js"></script>
     <script src="assets/js/util.js"></script>
     <script src="assets/js/main.js"></script>
-
+    <script src="assets/js/contact.js"></script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // ... seu código existente para abrir e fechar o modal ...
+            // --- Funcionalidade do Modal de Inscrição ---
+            const modal = document.getElementById('inscriptionModal');
+            // Nota: O botão de fechar do modal está dentro de uma variável com o mesmo nome que o do popup de imagem,
+            // mas com escopo diferente, por isso não há conflito. Usamos querySelector para pegar o primeiro que encontrar.
+            const closeModalButton = document.querySelector('.modal-content .close-button'); 
+            const openModalButtons = document.querySelectorAll('.open-modal-btn');
+            const modalIframe = document.getElementById('modalIframe');
 
-            // Obter o modal
-            var modal = document.getElementById('inscriptionModal');
-
-            // Obter o botão de fechar
-            var span = document.getElementsByClassName("close-button")[0];
-
-            // Obter todos os botões que abrem o modal
-            var openModalButtons = document.querySelectorAll('.open-modal-btn');
-
-            // Obter o iframe dentro do modal
-            var modalIframe = document.getElementById('modalIframe');
-
-            // Quando o usuário clica em um botão, abre o modal e carrega o iframe
             openModalButtons.forEach(function(btn) {
-                btn.onclick = function(event) {
-                    event.preventDefault(); // Previne o comportamento padrão do link
-                    var courseName = this.getAttribute('data-course-name');
-                    modal.style.display = "flex"; // Usa flexbox para centralizar
-                    // Define o src do iframe para o seu modal.html, passando o nome do curso como parâmetro de URL
-                    modalIframe.src = "ins-curso/modal.html?course=" + encodeURIComponent(courseName);
-                }
+                btn.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const courseName = this.getAttribute('data-course-name');
+                    modalIframe.src = "ins-curso/inscricao.html?course=" + encodeURIComponent(courseName);
+                    modal.style.display = "flex";
+                });
             });
 
-            // Quando o usuário clica no <span> (x), fecha o modal
-            span.onclick = function() {
+            function closeModal() {
                 modal.style.display = "none";
-                modalIframe.src = ""; // Limpa o src do iframe ao fechar para evitar que continue carregado
+                modalIframe.src = "";
             }
 
-            // Quando o usuário clica em qualquer lugar fora do modal, fecha-o
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                    modalIframe.src = ""; // Limpa o src do iframe
-                }
-            }
+            closeModalButton.addEventListener('click', closeModal);
 
-            // Adicionar este listener para receber mensagens do iframe
             window.addEventListener('message', function(event) {
                 if (event.data === 'closeModal') {
-                    modal.style.display = 'none';
-                    modalIframe.src = ""; // Limpa o src do iframe
+                    closeModal();
                 }
             });
+
+            // --- Funcionalidade do Popup de Imagem ---
+            const imagePopup = document.getElementById('imagePopup');
+            const popupImage = document.getElementById('popupImage');
+            const closePopup = document.querySelector('.image-popup .close-popup');
+            const prevImageBtn = document.querySelector('.prev-image');
+            const nextImageBtn = document.querySelector('.next-image');
+            const courseImages = document.querySelectorAll('.course-image');
+            
+            let currentImageIndex = 0;
+            let imageSources = [];
+
+            courseImages.forEach(imgLink => {
+                const img = imgLink.querySelector('img');
+                if (img) {
+                    imageSources.push(img.src);
+                    imgLink.addEventListener('click', function(event) {
+                        event.preventDefault(); // Impede que o link '#' recarregue a página
+                        popupImage.src = img.src;
+                        currentImageIndex = imageSources.indexOf(img.src);
+                        imagePopup.style.display = "flex";
+                    });
+                }
+            });
+
+            closePopup.addEventListener('click', function() {
+                imagePopup.style.display = "none";
+            });
+
+            function showPrevImage() {
+                currentImageIndex = (currentImageIndex > 0) ? currentImageIndex - 1 : imageSources.length - 1;
+                popupImage.src = imageSources[currentImageIndex];
+            }
+
+            function showNextImage() {
+                currentImageIndex = (currentImageIndex < imageSources.length - 1) ? currentImageIndex + 1 : 0;
+                popupImage.src = imageSources[currentImageIndex];
+            }
+
+            prevImageBtn.addEventListener('click', showPrevImage);
+            nextImageBtn.addEventListener('click', showNextImage);
+
+            // Fecha os popups ao clicar fora do conteúdo
+            window.addEventListener('click', function(event) {
+                if (event.target == modal) {
+                    closeModal();
+                }
+                if (event.target == imagePopup) {
+                    imagePopup.style.display = "none";
+                }
+            });
+            
+            // CORREÇÃO: Removido o '});' extra que estava aqui e causava um erro de sintaxe.
         });
     </script>
 </body>
-
 </html>
+
