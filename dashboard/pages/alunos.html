@@ -1,0 +1,191 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Gestão de Alunos Inscritos</h1>
+</div>
+
+<div class="row g-3 mb-4 align-items-center">
+    <div class="col-md-5">
+        <label for="course-filter" class="form-label">Filtrar por Curso</label>
+        <select id="course-filter" class="form-select">
+            <option value="">Todos os Cursos</option>
+            </select>
+    </div>
+    <div class="col-md-7">
+        <label for="search-input" class="form-label">Pesquisar por Nome, Email ou Telefone</label>
+        <input type="text" id="search-input" class="form-control" placeholder="Digite para pesquisar...">
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Curso</th>
+                <th>Classificação Final</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="students-table-body">
+            </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="updateGradeModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Atualizar Aluno</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Atualizar dados para <strong id="student-name-grade-modal"></strong>.</p>
+                <input type="hidden" id="modal-sheetName-grade">
+                <input type="hidden" id="modal-rowNumber-grade">
+                <div class="mb-3">
+                    <label for="modal-finalGrade" class="form-label">Classificação Final</label>
+                    <input type="text" class="form-control" id="modal-finalGrade" placeholder="Ex: 18, Aprovado, etc.">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="confirm-update-grade-btn">Guardar e Marcar como Concluído</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const webAppUrl = 'https://script.google.com/macros/s/AKfycbwnPVzQ23kl6mqUqqNyUuJAZmRItYWqbI6tyBD_de6vwQYGhPJRoS7BKp5lNj96xzzu/exec'; // IMPORTANTE
+    let allStudents = []; // Armazena todos os alunos para filtrar no frontend
+
+    const updateGradeModal = new bootstrap.Modal(document.getElementById('updateGradeModal'));
+    const tableBody = document.getElementById('students-table-body');
+    const courseFilter = document.getElementById('course-filter');
+    const searchInput = document.getElementById('search-input');
+
+    // Função principal para carregar os alunos do backend
+    async function loadEnrolledStudents() {
+        tableBody.innerHTML = '<tr><td colspan="6" class="text-center">A carregar alunos...</td></tr>';
+        try {
+            const response = await fetch(webAppUrl, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'getEnrolledStudents' }),
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+            });
+            const result = await response.json();
+            if (result.status === 'success') {
+                allStudents = result.data;
+                populateCourseFilter(allStudents);
+                displayStudents();
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (error) {
+            tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Erro ao carregar: ${error.message}</td></tr>`;
+        }
+    }
+
+    // Preenche o dropdown de cursos com base nos alunos carregados
+    function populateCourseFilter(students) {
+        const courses = [...new Set(students.map(s => s.course))]; // Pega cursos únicos
+        courseFilter.innerHTML = '<option value="">Todos os Cursos</option>'; // Limpa e adiciona a opção padrão
+        courses.sort().forEach(course => {
+            const option = document.createElement('option');
+            option.value = course;
+            option.textContent = course;
+            courseFilter.appendChild(option);
+        });
+    }
+
+    // Filtra e exibe os alunos na tabela
+    function displayStudents() {
+        const course = courseFilter.value;
+        const searchTerm = searchInput.value.toLowerCase();
+
+        const filteredStudents = allStudents.filter(student => {
+            const matchesCourse = !course || student.course === course;
+            const matchesSearch = !searchTerm || 
+                                  student.firstName.toLowerCase().includes(searchTerm) ||
+                                  student.lastName.toLowerCase().includes(searchTerm) ||
+                                  student.email.toLowerCase().includes(searchTerm) ||
+                                  student.phone.includes(searchTerm);
+            return matchesCourse && matchesSearch;
+        });
+
+        tableBody.innerHTML = ''; // Limpa a tabela
+        if (filteredStudents.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="6" class="text-center">Nenhum aluno encontrado.</td></tr>';
+            return;
+        }
+
+        filteredStudents.forEach(student => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${student.firstName} ${student.lastName}</td>
+                <td>${student.email}</td>
+                <td>${student.phone}</td>
+                <td>${student.course}</td>
+                <td>${student.finalGrade}</td>
+                <td>
+                    <button class="btn btn-sm btn-primary update-btn" 
+                            data-sheetname="${student.sheetName}" 
+                            data-rownumber="${student.rowNumber}" 
+                            data-studentname="${student.firstName} ${student.lastName}"
+                            data-finalgrade="${student.finalGrade}">
+                        Atualizar
+                    </button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    // Abre o modal para atualizar a nota
+    tableBody.addEventListener('click', function(e) {
+        if (e.target.classList.contains('update-btn')) {
+            const button = e.target;
+            document.getElementById('student-name-grade-modal').textContent = button.dataset.studentname;
+            document.getElementById('modal-sheetName-grade').value = button.dataset.sheetname;
+            document.getElementById('modal-rowNumber-grade').value = button.dataset.rownumber;
+            document.getElementById('modal-finalGrade').value = button.dataset.finalgrade;
+            updateGradeModal.show();
+        }
+    });
+
+    // Envia a atualização para o backend
+    document.getElementById('confirm-update-grade-btn').addEventListener('click', async function() {
+        const payload = {
+            sheetName: document.getElementById('modal-sheetName-grade').value,
+            rowNumber: document.getElementById('modal-rowNumber-grade').value,
+            finalGrade: document.getElementById('modal-finalGrade').value
+        };
+
+        try {
+            const response = await fetch(webAppUrl, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'updateGrade', payload: payload }),
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+            });
+            const result = await response.json();
+            if (result.status === 'success') {
+                alert(result.message);
+                updateGradeModal.hide();
+                loadEnrolledStudents(); // Recarrega a lista para mostrar as alterações
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (error) {
+            alert('Erro ao atualizar: ' + error.message);
+        }
+    });
+
+    // Event listeners para os filtros
+    courseFilter.addEventListener('change', displayStudents);
+    searchInput.addEventListener('input', displayStudents);
+
+    // Carrega os dados iniciais
+    loadEnrolledStudents();
+</script>

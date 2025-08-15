@@ -1,0 +1,134 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Relatório Financeiro</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-bg-success mb-3">
+            <div class="card-header">Total de Entradas</div>
+            <div class="card-body">
+                <h5 class="card-title" id="total-entradas">A carregar...</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-bg-danger mb-3">
+            <div class="card-header">Total de Saídas</div>
+            <div class="card-body">
+                <h5 class="card-title" id="total-saidas">A carregar...</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-bg-primary mb-3">
+            <div class="card-header">Saldo Atual</div>
+            <div class="card-body">
+                <h5 class="card-title" id="saldo-atual">A carregar...</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-end mb-3">
+    <div class="btn-group" role="group" id="filter-buttons">
+        <button type="button" class="btn btn-outline-secondary filter-btn" data-filter="today">Hoje</button>
+        <button type="button" class="btn btn-outline-secondary filter-btn active" data-filter="this_week">Esta Semana</button>
+        <button type="button" class="btn btn-outline-secondary filter-btn" data-filter="this_month">Este Mês</button>
+        <button type="button" class="btn btn-outline-secondary filter-btn" data-filter="all">Tudo</button>
+    </div>
+</div>
+
+<h2 class="h4">Transações Recentes</h2>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>ID da Transação</th>
+                <th>Tipo</th>
+                <th>Descrição</th>
+                <th class="text-end">Montante</th>
+            </tr>
+        </thead>
+        <tbody id="transactions-table-body">
+            </tbody>
+    </table>
+</div>
+
+<script>
+    const webAppUrl = 'https://script.google.com/macros/s/AKfycbwnPVzQ23kl6mqUqqNyUuJAZmRItYWqbI6tyBD_de6vwQYGhPJRoS7BKp5lNj96xzzu/exec'; // IMPORTANTE
+    
+    const totalEntradasEl = document.getElementById('total-entradas');
+    const totalSaidasEl = document.getElementById('total-saidas');
+    const saldoAtualEl = document.getElementById('saldo-atual');
+    const tableBody = document.getElementById('transactions-table-body');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+
+    // Função principal para carregar os dados financeiros
+    async function loadFinancialData(filter = 'this_week') {
+        // Mostra um estado de carregamento
+        totalEntradasEl.textContent = 'A carregar...';
+        totalSaidasEl.textContent = 'A carregar...';
+        saldoAtualEl.textContent = 'A carregar...';
+        tableBody.innerHTML = `<tr><td colspan="5" class="text-center">A carregar transações...</td></tr>`;
+
+        // Atualiza o botão ativo
+        filterButtons.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.filter === filter);
+        });
+
+        try {
+            const response = await fetch(webAppUrl, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'getFinancialData', payload: { filter: filter } }),
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+            });
+            const result = await response.json();
+            if (result.status === 'success') {
+                displayFinancialData(result.data);
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (error) {
+            tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">Erro ao carregar: ${error.message}</td></tr>`;
+        }
+    }
+
+    // Função para exibir os dados na página
+    function displayFinancialData(data) {
+        // Atualiza os cartões de resumo
+        totalEntradasEl.textContent = `${data.summary.totalEntradas.toFixed(2)} Kz`;
+        totalSaidasEl.textContent = `${data.summary.totalSaidas.toFixed(2)} Kz`;
+        saldoAtualEl.textContent = `${data.summary.saldo.toFixed(2)} Kz`;
+        
+        // Limpa e preenche a tabela de transações
+        tableBody.innerHTML = '';
+        if (data.transactions.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="5" class="text-center">Nenhuma transação encontrada para este período.</td></tr>`;
+            return;
+        }
+
+        data.transactions.forEach(tx => {
+            const row = document.createElement('tr');
+            const typeClass = tx.type === 'Entrada' ? 'text-success' : 'text-danger';
+            row.innerHTML = `
+                <td>${tx.date}</td>
+                <td>${tx.id}</td>
+                <td class="${typeClass}"><strong>${tx.type}</strong></td>
+                <td>${tx.description}</td>
+                <td class="text-end">${tx.amount}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    // Adiciona os event listeners aos botões de filtro
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            loadFinancialData(button.dataset.filter);
+        });
+    });
+
+    // Carrega os dados da semana atual por defeito
+    loadFinancialData('this_week');
+</script>

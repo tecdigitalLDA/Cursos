@@ -1,27 +1,68 @@
-// ins-curso/inscricao.js
+// Ficheiro: inscricao.js (Versão Corrigida e Final)
 
-/**
- * Função auxiliar para ler um ficheiro e retornar os seus dados em formato Base64.
- */
+// Declara as variáveis no escopo global do script para que todas as funções as possam aceder
+let form, provinceSelect, municipalitySelect;
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Inicializa as variáveis quando o documento estiver pronto
+    form = document.getElementById('registrationForm');
+    provinceSelect = document.getElementById('province');
+    municipalitySelect = document.getElementById('municipality');
+
+    // --- LÓGICA DOS MENUS DINÂMICOS ---
+    const municipiosPorProvincia = {
+        "Huambo": ["Huambo", "Bailundo", "Caála", "Catchiungo", "Chicala-Cholohanga", "Ekunha", "Londuimbale", "Longonjo", "Mungo", "Tchindjenje", "Ukuma"],
+        "Luanda": ["Belas", "Cacuaco", "Cazenga", "Ícolo e Bengo", "Luanda", "Quiçama", "Talatona", "Viana"],
+        "Benguela": ["Baía Farta", "Balombo", "Benguela", "Bocoio", "Caimbambo", "Catumbela", "Chongorói", "Cubal", "Ganda", "Lobito"],
+        "Huíla": ["Caconda", "Cacula", "Caluquembe", "Chiange", "Chibia", "Chicomba", "Chipindo", "Cuvango", "Humpata", "Jamba", "Lubango", "Matala", "Quilengues", "Quipungo"],
+        "Bié": ["Andulo", "Camacupa", "Catabola", "Chinguar", "Chitembo", "Cuemba", "Cunhinga", "Kuito", "Nharea"]
+    };
+
+    for (const provincia in municipiosPorProvincia) {
+        provinceSelect.options[provinceSelect.options.length] = new Option(provincia, provincia);
+    }
+
+    provinceSelect.addEventListener('change', function() {
+        municipalitySelect.innerHTML = '<option value="" disabled selected>Selecione...</option>';
+        municipalitySelect.disabled = true;
+
+        const selectedProvince = this.value;
+        if (selectedProvince) {
+            const municipios = municipiosPorProvincia[selectedProvince];
+            municipios.forEach(municipio => {
+                municipalitySelect.options[municipalitySelect.options.length] = new Option(municipio, municipio);
+            });
+            municipalitySelect.disabled = false;
+        }
+    });
+
+    // --- LÓGICA DE VALIDAÇÃO ---
+    form.addEventListener('submit', async function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        } else {
+            await handleFormSubmit(event);
+        }
+        form.classList.add('was-validated');
+    }, false);
+});
+
 function readFileAsBase64(file) {
     return new Promise((resolve, reject) => {
+        if (!file) resolve(null);
         const reader = new FileReader();
-        reader.onload = (event) => {
-            resolve({
-                fileName: file.name,
-                mimeType: file.type,
-                fileContent: event.target.result.split(',')[1]
-            });
-        };
+        reader.onload = (event) => resolve({
+            fileName: file.name,
+            mimeType: file.type,
+            fileContent: event.target.result.split(',')[1]
+        });
         reader.onerror = (error) => reject(error);
         reader.readAsDataURL(file);
     });
 }
 
-/**
- * Event Listener para a submissão do formulário de inscrição.
- */
-document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+async function handleFormSubmit(e) {
     e.preventDefault();
 
     const submitButton = document.getElementById('submitButton');
@@ -35,34 +76,26 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     submitButton.disabled = true;
 
     try {
-        const webAppUrl = 'https://script.google.com/macros/s/AKfycbyzIvTYcak6l1feqF5V-ytMM9PRHn7-34H3BAMF1F_PtXe0sqPTQulfyzgq_qRvNWdteQ/exec'; // ****** IMPORTANTE: Insira a sua URL ******
+        const webAppUrl = 'https://script.google.com/macros/s/AKfycbxIonedZAbPKHx_ZDqdpR6LnjXUAIAv91lAAmyb0E5z4K8HeGTGEHoedxTuXNnOtLha9w/exec'; // ****** IMPORTANTE: Insira a sua URL ******
 
-        // NOVO: Pega o nome do curso a partir do parâmetro da URL do iframe
         const urlParams = new URLSearchParams(window.location.search);
-        const courseName = urlParams.get('course') || 'Curso não especificado'; // Fallback
+        const courseName = urlParams.get('course') || 'Curso não especificado';
 
         const idFile = document.getElementById('identityDocument').files[0];
         const paymentFile = document.getElementById('paymentProof').files[0];
-
-        if (!idFile || !paymentFile) {
-            throw new Error("Por favor, anexe o Documento de Identidade e o Comprovativo de Pagamento.");
-        }
 
         const [idFileData, paymentFileData] = await Promise.all([
             readFileAsBase64(idFile),
             readFileAsBase64(paymentFile)
         ]);
 
-        // Monta o payload, agora incluindo o nome do curso
         const payload = {
-             action: 'handleInscription', // <<< ADICIONE ESTA LINHA
-            courseName: courseName, // <<< ADICIONADO
+            courseName: courseName,
             firstName: document.getElementById('firstName').value,
             lastName: document.getElementById('lastName').value,
             biNumber: document.getElementById('biNumber').value,
             email: document.getElementById('email').value,
             phoneNumber: document.getElementById('phoneNumber').value,
-            address: document.getElementById('address').value,
             province: document.getElementById('province').value,
             municipality: document.getElementById('municipality').value,
             identityDocument: idFileData,
@@ -75,18 +108,22 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
             headers: { 'Content-Type': 'text/plain;charset=utf-8' }
         });
 
+        if (!response.ok) {
+            throw new Error(`O servidor respondeu com um erro: ${response.statusText}`);
+        }
+
         const data = await response.json();
 
-        if (data.status === 'success' && data.receiptUrl) {
+        if (data.status === 'success') {
+            alertSuccess.innerHTML = `<strong>Sucesso!</strong> Sua inscrição foi submetida com sucesso. Enviaremos um e-mail de confirmação se estiver tudo certo com os seus dados. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`;
             alertSuccess.style.display = 'block';
-            const downloadLink = document.getElementById('download-receipt');
-            downloadLink.href = data.receiptUrl;
-            document.getElementById('registrationForm').reset();
+            form.reset();
+            form.classList.remove('was-validated');
+            municipalitySelect.disabled = true; // Agora esta linha funciona
 
-            // Opcional: Envia uma mensagem para a página principal fechar o modal
-            setTimeout(function() {
+            setTimeout(() => {
                 window.parent.postMessage('closeModal', '*');
-            }, 5000); // Fecha o modal após 5 segundos
+            }, 5000);
 
         } else {
             throw new Error(data.message || "Ocorreu um erro desconhecido no servidor.");
@@ -101,94 +138,4 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
         spinner.style.display = 'none';
         submitButton.disabled = false;
     }
-});
-// /**
-//  * Função auxiliar para ler um ficheiro e retornar os seus dados em formato Base64.
-//  */
-// function readFileAsBase64(file) {
-//     return new Promise((resolve, reject) => {
-//         const reader = new FileReader();
-//         reader.onload = (event) => {
-//             resolve({
-//                 fileName: file.name,
-//                 mimeType: file.type,
-//                 fileContent: event.target.result.split(',')[1]
-//             });
-//         };
-//         reader.onerror = (error) => reject(error);
-//         reader.readAsDataURL(file);
-//     });
-// }
-
-// /**
-//  * Event Listener para a submissão do formulário de inscrição.
-//  */
-// document.getElementById('registrationForm').addEventListener('submit', async function(e) {
-//     e.preventDefault();
-
-//     const submitButton = document.getElementById('submitButton');
-//     const spinner = document.getElementById('spinner');
-//     const alertSuccess = document.getElementById('alert-sucesso');
-//     const alertFail = document.getElementById('alert-falha');
-    
-//     alertSuccess.style.display = 'none';
-//     alertFail.style.display = 'none';
-//     spinner.style.display = 'inline-block';
-//     submitButton.disabled = true;
-
-//     try {
-//         // ****** IMPORTANTE: Insira aqui a URL da sua NOVA implementação! ******
-//         const webAppUrl = 'https://script.google.com/macros/s/AKfycbyzIvTYcak6l1feqF5V-ytMM9PRHn7-34H3BAMF1F_PtXe0sqPTQulfyzgq_qRvNWdteQ/exec';
-
-//         const idFile = document.getElementById('identityDocument').files[0];
-//         const paymentFile = document.getElementById('paymentProof').files[0];
-
-//         if (!idFile || !paymentFile) {
-//             throw new Error("Por favor, anexe o Documento de Identidade e o Comprovativo de Pagamento.");
-//         }
-
-//         const [idFileData, paymentFileData] = await Promise.all([
-//             readFileAsBase64(idFile),
-//             readFileAsBase64(paymentFile)
-//         ]);
-
-//         const payload = {
-//             firstName: document.getElementById('firstName').value,
-//             lastName: document.getElementById('lastName').value,
-//             biNumber: document.getElementById('biNumber').value,
-//             email: document.getElementById('email').value,
-//             phoneNumber: document.getElementById('phoneNumber').value,
-//             address: document.getElementById('address').value,
-//             province: document.getElementById('province').value,
-//             municipality: document.getElementById('municipality').value,
-//             identityDocument: idFileData,
-//             paymentProof: paymentFileData
-//         };
-        
-//         const response = await fetch(webAppUrl, {
-//             method: 'POST',
-//             body: JSON.stringify(payload),
-//             headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-//         });
-
-//         const data = await response.json();
-
-//         if (data.status === 'success' && data.receiptUrl) {
-//             alertSuccess.style.display = 'block';
-//             const downloadLink = document.getElementById('download-receipt');
-//             downloadLink.href = data.receiptUrl;
-//             document.getElementById('registrationForm').reset();
-//         } else {
-//             throw new Error(data.message || "Ocorreu um erro desconhecido no servidor.");
-//         }
-
-//     } catch (error) {
-//         console.error('Erro no processo de inscrição:', error);
-//         alertFail.innerHTML = `<strong>Erro!</strong> ${error.message} <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`;
-//         alertFail.style.display = 'block';
-        
-//     } finally {
-//         spinner.style.display = 'none';
-//         submitButton.disabled = false;
-//     }
-// });
+}

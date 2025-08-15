@@ -1,8 +1,0 @@
-.modal-sheet .modal-dialog {
-  max-width: 480px;
-  width: 100%;
-  transition: bottom .75s ease-in-out;
-}
-.modal-sheet .modal-footer {
-  padding-bottom: 2rem;
-}
