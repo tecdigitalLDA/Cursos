@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<html lang="pt">
+
+<head>
+    <title>Consulta de Inscrição - TecDigital</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript>
+        <link rel="stylesheet" href="assets/css/noscript.css" />
+    </noscript>
+</head>
+
+<body class="is-preload">
+
+    <!-- Wrapper -->
+    <div id="wrapper" class="fade-in">
+
+        <!-- Header e Nav (Mantendo a identidade visual) -->
+        <header id="header">
+            <a href="index.html" class="logo">TecDigital</a>
+        </header>
+        <nav id="nav">
+            <ul class="links">
+                <li><a href="index.html">Home</a></li>
+                <li ><a href="turmas-online.html">Turmas Online</a></li>
+                <li class="active"><a href="consulta.html">Consultar Inscrição</a></li>
+                <li><a href="somostecdigital.html">Quem Somos</a></li>               
+            </ul>
+            <ul class="icons">
+                <li><a href="#" class="icon brands fa-linkedin"><span class="label">Linkedin</span></a></li>
+                <li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+                <li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+                <li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+            </ul>
+        </nav>
+
+        <!-- Conteúdo Principal da Página -->
+        <div id="main">
+            <!-- Post Principal com o Formulário de Consulta -->
+            <article class="post featured">
+                <header class="major">
+                    <h2>Consulte a sua Inscrição</h2>
+                    <p>Insira o seu email e número do Bilhete de Identidade usados no registo para verificar o status da sua inscrição e a sua classificação final.</p>
+                </header>
+
+                <!-- Formulário de Pesquisa -->
+                <section>
+                    <form id="status-form">
+                        <div class="fields">
+                            <div class="field half">
+                                <label for="search-email">Email</label>
+                                <input type="email" name="search-email" id="search-email" required />
+                            </div>
+                            <div class="field half">
+                                <label for="search-bi">Nº do Bilhete de Identidade</label>
+                                <input type="text" name="search-bi" id="search-bi" required />
+                            </div>
+                        </div>
+                        <ul class="actions special">
+                            <li><button type="submit" class="button large">Pesquisar</button></li>
+                        </ul>
+                    </form>
+                </section>
+
+                <!-- Área para mostrar os resultados -->
+                <div id="status-result" class="mt-4"></div>
+            </article>
+
+            <!-- Secção de Estatísticas -->
+            <section class="posts">
+                <article>
+                    <header>
+                        <span class="date">Estatísticas</span>
+                        <h2><a href="#">Mais de 500<br />
+                        Alunos Formados</a></h2>
+                    </header>
+                    <a href="#" class="image fit"><img src="images/pic02.jpg" alt="" /></a>
+                    <p>Junte-se a uma comunidade crescente de profissionais qualificados pela TecDigital.</p>
+                </article>
+                <article>
+                    <header>
+                        <span class="date">Qualidade</span>
+                        <h2><a href="#">95% de Taxa de<br />
+                        Satisfação</a></h2>
+                    </header>
+                    <a href="#" class="image fit"><img src="images/pic03.jpg" alt="" /></a>
+                    <p>O nosso compromisso é com o seu sucesso. A satisfação dos nossos alunos é a nossa maior prioridade.</p>
+                </article>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer id="footer">
+            <!-- O seu footer pode ser copiado e colado aqui -->
+        </footer>
+        <div id="copyright">
+            <ul><li>&copy; Todos os direitos reservados</li><li><a href="#">TecDigital Sul LDA</a></li></ul>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrollex.min.js"></script>
+    <script src="assets/js/jquery.scrolly.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+
+    <!-- Script para a funcionalidade de consulta -->
+    <script>
+        document.getElementById('status-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const resultDiv = document.getElementById('status-result');
+            const button = this.querySelector('button[type="submit"]');
+
+            resultDiv.innerHTML = '<p>A pesquisar...</p>';
+            button.disabled = true;
+
+            const email = document.getElementById('search-email').value;
+            const bi = document.getElementById('search-bi').value;
+
+            // =========================================================================
+            // IMPORTANTE: Substitua pela URL da SUA NOVA implementação do Web App PÚBLICO
+            // =========================================================================
+           const webAppUrl = 'https://script.google.com/macros/s/AKfycbydkdNQN0HJv-CbUwsVAH59o9gVXZ5salPbaFFrkGPknLWD9UcLDxHR71ZRXFrgMEUUoA/exec';
+
+            try {
+                const response = await fetch(`${webAppUrl}?email=${encodeURIComponent(email)}&bi=${encodeURIComponent(bi)}`);
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    const data = result.data;
+                    resultDiv.innerHTML = `
+                        <div class="box">
+                            <h4>Olá, ${data.studentName}!</h4>
+                            <p><strong>Curso:</strong> ${data.course}</p>
+                            <p><strong>Status da Inscrição:</strong> ${data.status}</p>
+                            <p><strong>Classificação Final:</strong> ${data.finalGrade}</p>
+                        </div>
+                    `;
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: red;"><strong>Erro:</strong> ${error.message}</p>`;
+            } finally {
+                button.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

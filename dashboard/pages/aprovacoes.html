@@ -1,0 +1,158 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Aprovações Pendentes</h1>
+</div>
+
+<div id="pending-list-container">
+    </div>
+
+
+<div class="modal fade" id="approvalModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar Aprovação</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Por favor, insira os detalhes financeiros para <strong id="student-name-modal"></strong>.</p>
+                
+                <input type="hidden" id="modal-sheetName">
+                <input type="hidden" id="modal-rowNumber">
+
+                <div class="mb-3">
+                    <label for="modal-amount" class="form-label">Montante Pago (Kz)</label>
+                    <input type="number" class="form-control" id="modal-amount" required>
+                </div>
+                <div class="mb-3">
+                    <label for="modal-paymentMethod" class="form-label">Forma de Pagamento</label>
+                    <select class="form-select" id="modal-paymentMethod" required>
+                        <option value="" disabled selected>Selecione...</option>
+                        <option value="Transferência Bancária">Transferência Bancária</option>
+                        <option value="Multicaixa Express">Multicaixa Express</option>
+                        <option value="Depósito">Depósito</option>
+                        <option value="Numerário">Numerário</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" id="confirm-approval-btn">Confirmar Aprovação</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // CORREÇÃO: Usamos 'var' para evitar o erro "already been declared" ao navegar
+    var approvalModal = new bootstrap.Modal(document.getElementById('approvalModal'));
+    
+    // IMPORTANTE: Insira aqui o URL da implementação do seu Web App do DASHBOARD
+    const webAppUrl = 'https://script.google.com/macros/s/AKfycbzAznFPLRvYjYow0LAn6zgjWn7GUcd5-5BLaaqMGroBACLrtMsWsq8ERC2VkVXszwk/exec';
+
+    // Função para carregar as inscrições pendentes usando FETCH
+    async function loadPendingInscriptions() {
+        const container = document.getElementById('pending-list-container');
+        container.innerHTML = '<p class="text-center mt-4"><span class="spinner-border spinner-border-sm"></span> A procurar por inscrições pendentes...</p>';
+        
+        try {
+            const response = await fetch(webAppUrl, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'getPending' }),
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+            });
+
+            const result = await response.json();
+            if (result.status === 'success') {
+                displayPendingInscriptions(result.data);
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (error) {
+            container.innerHTML = `<div class="alert alert-danger">Erro ao carregar: ${error.message}</div>`;
+        }
+    }
+
+    // Função para exibir as inscrições na página (sem alterações)
+    function displayPendingInscriptions(inscriptions) {
+        const container = document.getElementById('pending-list-container');
+        if (!inscriptions || inscriptions.length === 0) {
+            container.innerHTML = '<div class="alert alert-success">Não há inscrições pendentes no momento.</div>';
+            return;
+        }
+
+        let html = '<ul class="list-group">';
+        inscriptions.forEach(insc => {
+            html += `
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>${insc.firstName} ${insc.lastName}</strong>
+                        <small class="d-block text-muted">Curso: ${insc.sheetName} | Data: ${new Date(insc.timestamp).toLocaleDateString()}</small>
+                    </div>
+                    <div>
+                        <a href="${insc.proofLink}" target="_blank" class="btn btn-sm btn-outline-info">Ver Comprov.</a>
+                        <button class="btn btn-sm btn-success" 
+                                onclick="openApprovalModal('${insc.sheetName}', ${insc.rowNumber}, '${insc.firstName} ${insc.lastName}')">
+                            Aprovar
+                        </button>
+                    </div>
+                </li>`;
+        });
+        html += '</ul>';
+        container.innerHTML = html;
+    }
+
+    // Função para abrir o modal (sem alterações)
+    function openApprovalModal(sheetName, rowNumber, studentName) {
+        document.getElementById('student-name-modal').textContent = studentName;
+        document.getElementById('modal-sheetName').value = sheetName;
+        document.getElementById('modal-rowNumber').value = rowNumber;
+        document.getElementById('modal-amount').value = '';
+        document.getElementById('modal-paymentMethod').value = '';
+        approvalModal.show();
+    }
+    
+    // Event listener para o botão de confirmação dentro do modal
+    document.getElementById('confirm-approval-btn').addEventListener('click', async function() {
+        const amount = document.getElementById('modal-amount').value;
+        const paymentMethod = document.getElementById('modal-paymentMethod').value;
+
+        if (!amount || !paymentMethod) {
+            alert("Por favor, preencha o montante e a forma de pagamento.");
+            return;
+        }
+
+        const approvalData = {
+            sheetName: document.getElementById('modal-sheetName').value,
+            rowNumber: document.getElementById('modal-rowNumber').value,
+            amount: amount,
+            paymentMethod: paymentMethod
+        };
+        
+        const container = document.getElementById('pending-list-container');
+        container.innerHTML = '<p class="text-center mt-4"><span class="spinner-border spinner-border-sm"></span> A processar aprovação...</p>';
+        approvalModal.hide();
+
+        try {
+            const response = await fetch(webAppUrl, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'approve', payload: approvalData }),
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+            });
+
+            const result = await response.json();
+            if (result.status === 'success') {
+                alert(result.message);
+                loadPendingInscriptions(); // Recarrega a lista
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (error) {
+            alert('Erro: ' + error.message);
+            loadPendingInscriptions(); // Recarrega a lista mesmo que dê erro
+        }
+    });
+
+    // Carrega a lista assim que a página é exibida
+    loadPendingInscriptions();
+</script>

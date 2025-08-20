@@ -1,0 +1,63 @@
+<!-- COMENTÁRIO: Este ficheiro contém a estrutura e o estilo do modal de login. -->
+<!-- Ele é carregado dinamicamente pelo auth.js. -->
+
+<!-- PERSONALIZAÇÃO: Todo o CSS do sign-in.css foi incorporado aqui dentro da tag <style> -->
+<style>
+    .form-signin {
+      max-width: 330px;
+      padding: 1rem;
+    }
+
+    .form-signin .form-floating:focus-within {
+      z-index: 2;
+    }
+
+    .form-signin input[type="email"] {
+      margin-bottom: -1px;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    .form-signin input[type="password"] {
+      margin-bottom: 10px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+</style>
+
+<!-- Estrutura do Modal do Bootstrap -->
+<div class="modal fade" id="loginModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <!-- PERSONALIZAÇÃO: O conteúdo abaixo foi adaptado do seu ficheiro index.html original -->
+                <main class="form-signin w-100 m-auto">
+                    <form id="loginForm">
+                        <!-- COMENTÁRIO: O caminho para o logo pode precisar de ajuste dependendo de onde está a sua pasta de imagens -->
+                        <img class="mb-4 d-block mx-auto" src="../images/logo.png" alt="Logotipo TecDigital" width="72" height="57">
+                        
+                        <!-- TRADUÇÃO: Título do formulário -->
+                        <h1 class="h3 mb-3 fw-normal text-center">Login de Administrador</h1>
+
+                        <div class="form-floating">
+                            <input type="email" class="form-control" id="floatingInput" placeholder="nome@exemplo.com" required>
+                            <!-- TRADUÇÃO: Rótulo do campo de email -->
+                            <label for="floatingInput">Endereço de Email</label>
+                        </div>
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="floatingPassword" placeholder="Senha" required>
+                            <!-- TRADUÇÃO: Rótulo do campo de senha -->
+                            <label for="floatingPassword">Senha</label>
+                        </div>
+
+                        <!-- TRADUÇÃO: Botão de submissão -->
+                        <button class="btn btn-primary w-100 py-2 mt-3" type="submit">Entrar</button>
+                        
+                        <!-- TRADUÇÃO: Rodapé -->
+                        <p class="mt-5 mb-3 text-body-secondary text-center">&copy; TecDigital 2023–2025</p>
+                    </form>
+                </main>
+            </div>
+        </div>
+    </div>
+</div>

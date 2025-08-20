@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html lang="pt">
+
+<head>
+    <title>Turmas Online - TecDigital</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+</head>
+
+<body class="is-preload">
+    <div id="wrapper" class="fade-in">
+        <header id="header">
+            <a href="index.html" class="logo">TecDigital</a>
+        </header>
+        <nav id="nav">
+            <ul class="links">
+                <li><a href="index.html">Home</a></li>
+                <li class="active"><a href="turmas-online.html">Turmas Online</a></li>                
+                <li><a href="consulta.html">Consultar Inscrição</a></li>
+                <li><a href="somostecdigital.html">Quem Somos</a></li>
+            </ul>
+            <ul class="icons">
+                </ul>
+        </nav>
+
+        <div id="main">
+            <article class="post featured">
+                <header class="major">
+                    <h2>Turmas Online Disponíveis</h2>
+                    <p>Escolha a sua turma e comece a sua jornada de aprendizagem connosco, onde quer que esteja.</p>
+                </header>
+
+                <section id="class-list" class="posts">
+                    <p>A carregar turmas disponíveis...</p>
+                </section>
+            </article>
+        </div>
+
+        <footer id="footer"></footer>
+        <div id="copyright">
+            <ul><li>&copy; Todos os direitos reservados</li><li><a href="#">TecDigital Sul LDA</a></li></ul>
+        </div>
+    </div>
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrollex.min.js"></script>
+    <script src="assets/js/jquery.scrolly.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+
+    <script>
+    /**
+     * Esta função é chamada quando um botão "Inscrever-me" é clicado.
+     * Ela envia uma mensagem para a página principal (index.html) para abrir o modal
+     * com o URL da nossa nova página de inscrição online.
+     */
+    function openRegistrationModal(classId, className) {
+        const registrationUrl = `ins-curso/inscricao-online.html?classId=${classId}&className=${encodeURIComponent(className)}`;
+        window.parent.postMessage({ type: 'openModal', url: registrationUrl }, '*');
+    }
+
+    document.addEventListener('DOMContentLoaded', async function() {
+        const classListContainer = document.getElementById('class-list');
+        const webAppUrl = 'https://script.google.com/macros/s/AKfycbydkdNQN0HJv-CbUwsVAH59o9gVXZ5salPbaFFrkGPknLWD9UcLDxHR71ZRXFrgMEUUoA/exec'; // IMPORTANTE
+
+        try {
+            const response = await fetch(`${webAppUrl}?action=getOnlineClasses`);
+            const result = await response.json();
+
+            if (result.status === 'success' && result.data.length > 0) {
+                classListContainer.innerHTML = '';
+                result.data.forEach(turma => {
+                    const article = document.createElement('article');
+                    // O botão agora chama a nossa nova função com os dados da turma
+                    article.innerHTML = `
+                        <header>
+                            <span class="date">${turma.course}</span>
+                            <h2><a href="#">${turma.name}</a></h2>
+                        </header>
+                        <a href="#" class="image fit"><img src="images/pic02.jpg" alt="" /></a>
+                        <p>Inscrições abertas para a turma online. Garanta a sua vaga e estude no seu próprio ritmo.</p>
+                        <ul class="actions special">
+                            <li><button class="button" onclick="openRegistrationModal('${turma.id}', '${turma.name}')">Inscrever-me</button></li>
+                        </ul>
+                    `;
+                    classListContainer.appendChild(article);
+                });
+            } else {
+                 classListContainer.innerHTML = '<p>De momento, não há turmas online com inscrições abertas. Volte em breve!</p>';
+            }
+        } catch (error) {
+            classListContainer.innerHTML = `<p style="color: red;"><strong>Erro:</strong> Não foi possível carregar a lista de turmas.</p>`;
+        }
+    });
+</script>
+</body>
+</html>
+

@@ -1,0 +1,56 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Painel</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary">Partilhar</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary">Exportar</button>
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
+            <svg class="bi"><use xlink:href="#calendar3"/></svg>
+            Esta semana
+        </button>
+    </div>
+</div>
+
+<canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
+
+<h2>Inscrições Recentes</h2>
+<div class="table-responsive small">
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Curso</th>
+                <th scope="col">Data</th>
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1001</td>
+                <td>João Silva</td>
+                <td>Excel Avançado</td>
+                <td>25/07/2025</td>
+                <td>Pendente</td>
+            </tr>
+            <tr>
+                <td>1002</td>
+                <td>Maria Santos</td>
+                <td>Marketing Digital</td>
+                <td>24/07/2025</td>
+                <td>Aprovado</td>
+            </tr>
+            <tr>
+                <td>1003</td>
+                <td>Carlos Pereira</td>
+                <td>Programação</td>
+                <td>24/07/2025</td>
+                <td>Aprovado</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js"></script>
+<!-- <script src="dashboard.js"></script> -->

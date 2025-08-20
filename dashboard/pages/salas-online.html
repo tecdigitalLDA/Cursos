@@ -1,0 +1,171 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Gestão de Salas Online</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createClassModal">
+            + Criar Nova Sala
+        </button>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nome da Sala</th>
+                <th>Curso Associado</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="classes-table-body">
+            </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="createClassModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Criar Nova Sala Online</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="create-class-form">
+                    <div class="mb-3">
+                        <label for="className" class="form-label">Nome da Sala / Turma</label>
+                        <input type="text" class="form-control" id="className" placeholder="Ex: Excel Avançado - Turma da Manhã" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="courseName" class="form-label">Curso Associado</label>
+                        <select class="form-select" id="courseName" required>
+                            <option value="" disabled selected>Selecione um curso...</option>
+                                <option value="" disabled selected>Selecione um curso...</option>
+                                <option value="Excel Avançado">EXL - Excel Avançado</option>
+                                <option value="Importação">IMP - Importação</option>
+                                <option value="Contabilidade Geral">CTG - Contabilidade Geral</option>
+                                <option value="Gestão de Recursos Humanos">GRH - Gestão de Recursos Humanos</option>
+                                <option value="Marketing Digital">MKT - Marketing Digital</option>
+                                <option value="Trader">TRD - Trader</option>
+                                <option value="Programação">PRG - Programação</option>
+                                <option value="Maquiagem">MQG - Maquiagem</option>
+                                <option value="Aplicação de Perucas">PER - Aplicação de Perucas</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="save-class-btn">Guardar Sala</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const webAppUrl = 'https://script.google.com/macros/s/AKfycbw5UzNTVeUiAv4yqTENjyVVbVPiB7bLZTWPBHiUjXwR8E84eAxghVXHFjc9-RS66YlZ/exec'; // IMPORTANTE
+    const createClassModal = new bootstrap.Modal(document.getElementById('createClassModal'));
+    const tableBody = document.getElementById('classes-table-body');
+
+    // Carrega e exibe as salas online
+    async function loadOnlineClasses() {
+        tableBody.innerHTML = '<tr><td colspan="4" class="text-center">A carregar salas...</td></tr>';
+        try {
+            const response = await fetch(webAppUrl, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'getOnlineClasses' }),
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+            });
+            const result = await response.json();
+            if (result.status === 'success') {
+                displayClasses(result.data);
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (error) {
+            tableBody.innerHTML = `<tr><td colspan="4" class="text-center text-danger">${error.message}</td></tr>`;
+        }
+    }
+
+    // Renderiza os dados na tabela
+    function displayClasses(classes) {
+        tableBody.innerHTML = '';
+        if (classes.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="4" class="text-center">Nenhuma sala online criada.</td></tr>';
+            return;
+        }
+        classes.forEach(c => {
+            const statusClass = c.status === 'Ativa' ? 'text-success' : 'text-danger';
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${c.name}</td>
+                <td>${c.course}</td>
+                <td><strong class="${statusClass}">${c.status}</strong></td>
+                <td>
+                    <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${c.id}" data-name="${c.name}">Apagar</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    // Event listener para o botão de guardar no modal
+    document.getElementById('save-class-btn').addEventListener('click', async () => {
+        const payload = {
+            className: document.getElementById('className').value,
+            courseName: document.getElementById('courseName').value
+        };
+        if (!payload.className || !payload.courseName) {
+            alert("Por favor, preencha todos os campos.");
+            return;
+        }
+
+        try {
+            const response = await fetch(webAppUrl, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'createOnlineClass', payload: payload }),
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+            });
+            const result = await response.json();
+            if (result.status === 'success') {
+                alert(result.message);
+                createClassModal.hide();
+                document.getElementById('create-class-form').reset();
+                loadOnlineClasses();
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (error) {
+            alert('Erro: ' + error.message);
+        }
+    });
+
+    // Event listener para os botões de apagar
+    tableBody.addEventListener('click', async (e) => {
+        if (e.target.classList.contains('delete-btn')) {
+            const classId = e.target.dataset.id;
+            const className = e.target.dataset.name;
+            if (confirm(`Tem a certeza que deseja apagar (arquivar) a sala "${className}"?`)) {
+                try {
+                    const response = await fetch(webAppUrl, {
+                        method: 'POST',
+                        body: JSON.stringify({ action: 'deleteOnlineClass', payload: { classId: classId } }),
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                    });
+                    const result = await response.json();
+                    if (result.status === 'success') {
+                        alert(result.message);
+                        loadOnlineClasses();
+                    } else {
+                        throw new Error(result.message);
+                    }
+                } catch (error) {
+                    alert('Erro: ' + error.message);
+                }
+            }
+        }
+    });
+
+    // Carrega as salas quando a página é aberta
+    loadOnlineClasses();
+</script>
