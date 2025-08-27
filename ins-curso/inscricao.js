@@ -1,3 +1,5 @@
+// Ficheiro: inscricao.js (Versão Corrigida e Final)
+
 // Declara as variáveis no escopo global do script para que todas as funções as possam aceder
 let form, provinceSelect, municipalitySelect;
 
@@ -60,7 +62,6 @@ function readFileAsBase64(file) {
     });
 }
 
-// Ficheiro: ins-curso/inscricao.js
 async function handleFormSubmit(e) {
     e.preventDefault();
 
@@ -75,7 +76,7 @@ async function handleFormSubmit(e) {
     submitButton.disabled = true;
 
     try {
-        const webAppUrl = 'https://script.google.com/macros/s/AKfycbzz4rz1zz16LalbgDNHHdblBpMX_FJQYCJGhxbO2wZlGDLiqjxWM-ufiCx26biWbKJwWg/exec';
+        const webAppUrl = 'https://script.google.com/macros/s/AKfycbyhBE__0QRcutwH9Uq9SVS656fFJLgLV96M_4yOjHXTLQgxz83mNVPy5ezRxPC_mvYyZg/exec'; // ****** IMPORTANTE: Insira a sua URL ******
 
         const urlParams = new URLSearchParams(window.location.search);
         const courseName = urlParams.get('course') || 'Curso não especificado';
@@ -88,7 +89,7 @@ async function handleFormSubmit(e) {
             readFileAsBase64(paymentFile)
         ]);
 
-        const studentPayload = {
+        const payload = {
             courseName: courseName,
             firstName: document.getElementById('firstName').value,
             lastName: document.getElementById('lastName').value,
@@ -101,37 +102,31 @@ async function handleFormSubmit(e) {
             paymentProof: paymentFileData
         };
         
-        // ---> CORREÇÃO PARA ENVIAR A ACTION <---
-        const finalPayload = {
-            action: 'handlePublicInscription',
-            payload: studentPayload
-        };
-
         const response = await fetch(webAppUrl, {
             method: 'POST',
-            body: JSON.stringify(finalPayload),
+            body: JSON.stringify(payload),
             headers: { 'Content-Type': 'text/plain;charset=utf-8' }
         });
-        
+
         if (!response.ok) {
             throw new Error(`O servidor respondeu com um erro: ${response.statusText}`);
         }
 
-        const result = await response.json(); // Esta linha agora não dará erro
+        const data = await response.json();
 
-        if (result.status === 'success') {
-            alertSuccess.innerHTML = `<strong>Sucesso!</strong> Sua inscrição foi submetida com sucesso... <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`;
+        if (data.status === 'success') {
+            alertSuccess.innerHTML = `<strong>Sucesso!</strong> Sua inscrição foi submetida com sucesso. Enviaremos um e-mail de confirmação se estiver tudo certo com os seus dados. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`;
             alertSuccess.style.display = 'block';
             form.reset();
             form.classList.remove('was-validated');
-            municipalitySelect.disabled = true;
+            municipalitySelect.disabled = true; // Agora esta linha funciona
 
             setTimeout(() => {
                 window.parent.postMessage('closeModal', '*');
             }, 5000);
 
         } else {
-            throw new Error(result.message);
+            throw new Error(data.message || "Ocorreu um erro desconhecido no servidor.");
         }
 
     } catch (error) {

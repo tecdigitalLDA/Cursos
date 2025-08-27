@@ -2,7 +2,7 @@
 
 // CONFIGURAÇÃO
 // IMPORTANTE: Insira aqui o URL da sua API PÚBLICA (o mesmo que usou nos outros ficheiros públicos)
-const webAppUrl = 'https://script.google.com/macros/s/AKfycbydkdNQN0HJv-CbUwsVAH59o9gVXZ5salPbaFFrkGPknLWD9UcLDxHR71ZRXFrgMEUUoA/exec';
+const webAppUrl = 'https://script.google.com/macros/s/AKfycbyhBE__0QRcutwH9Uq9SVS656fFJLgLV96M_4yOjHXTLQgxz83mNVPy5ezRxPC_mvYyZg/exec';
 
 // Pega os parâmetros do URL para saber em que turma inscrever o aluno
 const urlParams = new URLSearchParams(window.location.search);
