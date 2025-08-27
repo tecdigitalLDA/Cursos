@@ -1,5 +1,3 @@
-// Ficheiro: inscricao.js (Versão Corrigida e Final)
-
 // Declara as variáveis no escopo global do script para que todas as funções as possam aceder
 let form, provinceSelect, municipalitySelect;
 
@@ -63,8 +61,6 @@ function readFileAsBase64(file) {
 }
 
 // Ficheiro: ins-curso/inscricao.js
-// Ação: Substitua toda esta função
-
 async function handleFormSubmit(e) {
     e.preventDefault();
 
@@ -79,7 +75,7 @@ async function handleFormSubmit(e) {
     submitButton.disabled = true;
 
     try {
-        const webAppUrl = 'https://script.google.com/macros/s/AKfycbydkdNQN0HJv-CbUwsVAH59o9gVXZ5salPbaFFrkGPknLWD9UcLDxHR71ZRXFrgMEUUoA/exec';
+        const webAppUrl = 'https://script.google.com/macros/s/AKfycbzz4rz1zz16LalbgDNHHdblBpMX_FJQYCJGhxbO2wZlGDLiqjxWM-ufiCx26biWbKJwWg/exec';
 
         const urlParams = new URLSearchParams(window.location.search);
         const courseName = urlParams.get('course') || 'Curso não especificado';
@@ -92,7 +88,7 @@ async function handleFormSubmit(e) {
             readFileAsBase64(paymentFile)
         ]);
 
-        const studentPayload = { // Renomeado para maior clareza
+        const studentPayload = {
             courseName: courseName,
             firstName: document.getElementById('firstName').value,
             lastName: document.getElementById('lastName').value,
@@ -105,8 +101,7 @@ async function handleFormSubmit(e) {
             paymentProof: paymentFileData
         };
         
-        // ---> CORREÇÃO AQUI <---
-        // Agora enviamos um objeto que contém a 'action' e o 'payload'
+        // ---> CORREÇÃO PARA ENVIAR A ACTION <---
         const finalPayload = {
             action: 'handlePublicInscription',
             payload: studentPayload
@@ -114,19 +109,18 @@ async function handleFormSubmit(e) {
 
         const response = await fetch(webAppUrl, {
             method: 'POST',
-            body: JSON.stringify(finalPayload), // Enviamos o payload final
+            body: JSON.stringify(finalPayload),
             headers: { 'Content-Type': 'text/plain;charset=utf-8' }
         });
-        // ---> FIM DA CORREÇÃO <---
-
+        
         if (!response.ok) {
             throw new Error(`O servidor respondeu com um erro: ${response.statusText}`);
         }
 
-        const data = await response.json();
+        const result = await response.json(); // Esta linha agora não dará erro
 
-        if (data.status === 'success') {
-            alertSuccess.innerHTML = `<strong>Sucesso!</strong> Sua inscrição foi submetida com sucesso. Enviaremos um e-mail de confirmação se estiver tudo certo com os seus dados. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`;
+        if (result.status === 'success') {
+            alertSuccess.innerHTML = `<strong>Sucesso!</strong> Sua inscrição foi submetida com sucesso... <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`;
             alertSuccess.style.display = 'block';
             form.reset();
             form.classList.remove('was-validated');
@@ -137,7 +131,7 @@ async function handleFormSubmit(e) {
             }, 5000);
 
         } else {
-            throw new Error(data.message || "Ocorreu um erro desconhecido no servidor.");
+            throw new Error(result.message);
         }
 
     } catch (error) {

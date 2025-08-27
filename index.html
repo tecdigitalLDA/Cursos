@@ -384,26 +384,22 @@
     <script src="assets/js/main.js"></script>
     <script src="assets/js/contact.js"></script>
     
-    <script>
+<script>
     document.addEventListener('DOMContentLoaded', function() {
-        // --- Lógica Geral do Modal de Inscrição ---
         const modal = document.getElementById('inscriptionModal');
         const closeModalButton = document.querySelector('.modal-content .close-button');
         const modalIframe = document.getElementById('modalIframe');
 
-        // Função para abrir o modal com um URL específico
         function openModal(url) {
             modalIframe.src = url;
             modal.style.display = "flex";
         }
 
-        // Função para fechar o modal
         function closeModal() {
             modal.style.display = "none";
-            modalIframe.src = ""; // Limpa o iframe para parar vídeos ou outros conteúdos
+            modalIframe.src = "";
         }
 
-        // Adiciona o evento aos botões de inscrição da PÁGINA PRINCIPAL (formulário antigo)
         const openModalButtons = document.querySelectorAll('.open-modal-btn');
         openModalButtons.forEach(function(btn) {
             btn.addEventListener('click', function(event) {
@@ -414,29 +410,22 @@
             });
         });
         
-        // Adiciona o evento ao botão de fechar (X) do modal
         closeModalButton.addEventListener('click', closeModal);
 
-        // Ouve por mensagens vindas de outras páginas (iframes)
         window.addEventListener('message', function(event) {
-            // Ouve a ordem para FECHAR o modal (enviada por inscricao.js ou inscricao-online.js)
             if (event.data === 'closeModal') {
                 closeModal();
             }
-            // Ouve a ordem para ABRIR o modal (enviada por turmas-online.html)
             if (typeof event.data === 'object' && event.data.type === 'openModal') {
                 openModal(event.data.url);
             }
         });
         
-        // Fecha o modal se o utilizador clicar fora da área do conteúdo
         window.addEventListener('click', function(event) {
             if (event.target == modal) {
                 closeModal();
             }
         });
-
-        // --- (A sua lógica para o popup de imagem pode continuar aqui) ---
     });
 </script>
 </body>
