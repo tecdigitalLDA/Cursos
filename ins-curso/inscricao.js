@@ -62,6 +62,9 @@ function readFileAsBase64(file) {
     });
 }
 
+// Ficheiro: ins-curso/inscricao.js
+// Ação: Substitua toda esta função
+
 async function handleFormSubmit(e) {
     e.preventDefault();
 
@@ -76,7 +79,7 @@ async function handleFormSubmit(e) {
     submitButton.disabled = true;
 
     try {
-        const webAppUrl = 'https://script.google.com/macros/s/AKfycbydkdNQN0HJv-CbUwsVAH59o9gVXZ5salPbaFFrkGPknLWD9UcLDxHR71ZRXFrgMEUUoA/exec'; // ****** IMPORTANTE: Insira a sua URL ******
+        const webAppUrl = 'https://script.google.com/macros/s/AKfycbydkdNQN0HJv-CbUwsVAH59o9gVXZ5salPbaFFrkGPknLWD9UcLDxHR71ZRXFrgMEUUoA/exec';
 
         const urlParams = new URLSearchParams(window.location.search);
         const courseName = urlParams.get('course') || 'Curso não especificado';
@@ -89,7 +92,7 @@ async function handleFormSubmit(e) {
             readFileAsBase64(paymentFile)
         ]);
 
-        const payload = {
+        const studentPayload = { // Renomeado para maior clareza
             courseName: courseName,
             firstName: document.getElementById('firstName').value,
             lastName: document.getElementById('lastName').value,
@@ -102,11 +105,19 @@ async function handleFormSubmit(e) {
             paymentProof: paymentFileData
         };
         
+        // ---> CORREÇÃO AQUI <---
+        // Agora enviamos um objeto que contém a 'action' e o 'payload'
+        const finalPayload = {
+            action: 'handlePublicInscription',
+            payload: studentPayload
+        };
+
         const response = await fetch(webAppUrl, {
             method: 'POST',
-            body: JSON.stringify(payload),
+            body: JSON.stringify(finalPayload), // Enviamos o payload final
             headers: { 'Content-Type': 'text/plain;charset=utf-8' }
         });
+        // ---> FIM DA CORREÇÃO <---
 
         if (!response.ok) {
             throw new Error(`O servidor respondeu com um erro: ${response.statusText}`);
@@ -119,7 +130,7 @@ async function handleFormSubmit(e) {
             alertSuccess.style.display = 'block';
             form.reset();
             form.classList.remove('was-validated');
-            municipalitySelect.disabled = true; // Agora esta linha funciona
+            municipalitySelect.disabled = true;
 
             setTimeout(() => {
                 window.parent.postMessage('closeModal', '*');
