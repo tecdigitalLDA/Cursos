@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html lang="pt">
+<head>
+    <title>Minha Sala de Aula - TecDigital</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+</head>
+<body class="is-preload">
+    <div id="wrapper" class="fade-in">
+        <div id="main">
+            <article class="post featured">
+                <header class="major">
+                    <h2 id="welcome-message">Bem-vindo(a)!</h2>
+                    <p>Esta é a sua área de estudo privada. O conteúdo do curso aparecerá aqui.</p>
+                </header>
+                <p>O ID da sua turma é: <strong id="class-id-display"></strong></p>
+            </article>
+        </div>
+    </div>
+    <script>
+        // Pequeno script para mostrar que o ID da turma foi passado corretamente
+        const urlParams = new URLSearchParams(window.location.search);
+        const classId = urlParams.get('classId');
+        document.getElementById('class-id-display').textContent = classId || 'Não especificado';
+    </script>
+</body>
+</html>
