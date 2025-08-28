@@ -10,7 +10,8 @@
 </head>
 <body class="is-preload">
     <div id="wrapper" class="fade-in">
-      <!-- Header -->
+    
+        <!-- Header -->
 		<header id="header">
 			<a href="index.html" class="logo">TecDigital</a>
 		</header>
@@ -19,10 +20,9 @@
 		<nav id="nav">
 			<ul class="links">
 				<li><a href="index.html">Home</a></li>
-				 <li><a href="turmas-online.html">Turmas Online</a></li>
+				 <li lass="active"><a href="turmas-online.html">Turmas Online</a></li>
                  <li><a href="consulta.html">Consultar Inscrição</a></li>
-				<li class="active"><a href="somostecdigital.html">Quem Somos</a></li>
-				<!-- <li><a href="contactotecdigital.html">Faça Curso Aqui</a></li> -->
+				<li c><a href="somostecdigital.html">Quem Somos</a></li>				
 			</ul>
 			<ul class="icons">
 				<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
@@ -44,7 +44,66 @@
             </article>
         </div>
 
-        <div id="copyright"><ul><li>&copy; TecDigital Sul LDA</li></ul></div>
+        <!-- Footer -->
+          <footer id="footer">
+            <section>
+                <formid="contactForm" method="post" action="#">
+                    <div class="fields">
+                        <div class="field">
+                            <label for="name">Nome</label>
+                            <input type="text" name="name" id="name" />
+                        </div>
+                        <div class="field">
+                            <label for="email">Email</label>
+                            <input type="text" name="email" id="email" />
+                        </div>
+                        <div class="field">
+                            <label for="message">Mensagem</label>
+                            <textarea name="message" id="message" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <ul class="actions">
+                        <li><input type="submit" value="Send Message" /></li>
+                    </ul>
+                </form>
+            </section>
+            <section class="split contact">
+                <section class="alt">
+                    <h3>Localização</h3><br />
+                    <p>Huambo, Largo Wassanjuca<br />
+                        atrás da Clínca Medisafe</p>
+                </section>
+                <section>
+                    <h3>Telefone</h3>
+                    <p><a href="#">(+244) 936 065 155</a></p>
+                </section>
+                <section>
+                    <h3>Email</h3>
+                    <p><a href="#">tecdigital61@gmail.com</a></p>
+                </section>
+                <section>
+                    <h3>Redes Socias</h3>
+                    <ul class="icons alt">
+                        <li><a href="https://www.linkedin.com/in/tec-digital-3b6370263/"
+                                class="icon brands alt fa-linkedin"><span class="label">Linkedin</span></a></li>
+                        <li><a href="https://www.facebook.com/p/Tec-Digital-SU-LDA-100087834732969/"
+                                class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+                        <li><a href="https://www.instagram.com/tecdigitalsulda/"
+                                class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
+                        <li><a href="https://github.com/tecdigitalLDA" class="icon brands alt fa-github"><span
+                                        class="label">GitHub</span></a></li>
+                    </ul>
+                </section>
+            </section>
+        </footer>
+
+		<!-- Copyright -->		
+        <div id="copyright">
+            <ul>
+                <li>&copy; Todos os direitos reservados</li>
+                <li> <a href="https://www.facebook.com/p/Tec-Digital-SU-LDA-100087834732969/">TecDigital Sul LDA</a></li>
+            </ul>
+        </div>
     </div>
 
     <div id="g_id_onload"
