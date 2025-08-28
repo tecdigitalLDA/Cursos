@@ -7,6 +7,18 @@ const webAppUrl = 'https://script.google.com/macros/s/AKfycbxyHnW6rIT1lJ9dPBqnvK
  * Esta função é chamada pelo botão do Google após um login bem-sucedido.
  */
 async function handleStudentLogin(response) {
+
+    const result = await res.json();
+        if (result.status === 'success' && result.data.length > 0) {
+            statusDiv.innerHTML = '<p style="color: green;">Acesso concedido! A redirecionar...</p>';
+            
+            // ---> ALTERAÇÃO AQUI: Guarda o "token" na sessão do navegador <---
+            sessionStorage.setItem('googleUserToken', response.credential);
+
+            const firstClass = result.data[0];
+            window.location.href = `sala-aula.html?classId=${firstClass.classId}`;
+
+    
     const statusDiv = document.getElementById('login-status');
     statusDiv.innerHTML = '<p>A verificar acesso...</p>';
 
