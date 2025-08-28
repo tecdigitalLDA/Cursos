@@ -1,4 +1,4 @@
-const webAppUrl = 'https://script.google.com/macros/s/AKfycbxyHnW6rIT1lJ9dPBqnvKYZQ3KZ0IHZV_e_3g4dtgI98cyu8X7cbxrlOozF3o1srf8fyg/exec'; // IMPORTANTE
+const webAppUrl = 'https://script.google.com/macros/s/AKfycbzAw3fdX_hb9i9G7xVihx3mb6Rs70Ix81lNGOg3wTmG8btm_rajmCCSCCsaTn0U145t/exec'; // IMPORTANTE
 
 document.addEventListener('DOMContentLoaded', () => {
     // Lógica para o botão de logout
@@ -10,9 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
             sessionStorage.removeItem('studentName');
             alert("Sessão terminada.");
             window.location.href = 'turmas-online.html'; // Redireciona para a lista de turmas
-    });
-}
+        });
+    }
+});
 
+// Função para buscar os dados da turma
 async function fetchClassroomData(classId, studentEmail) {
     try {
         const response = await fetch(webAppUrl, {
@@ -21,7 +23,7 @@ async function fetchClassroomData(classId, studentEmail) {
                 action: 'getClassroomDetails',
                 payload: { classId, studentEmail }
             }),
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            headers: { 'Content-Type': 'application/json' },
             mode: 'cors'
         });
 
@@ -29,21 +31,29 @@ async function fetchClassroomData(classId, studentEmail) {
         if (result.status === 'success') {
             renderClassroom(result.data);
         } else {
-            throw new Error(result.message);
+            throw new Error(result.message || 'Erro ao buscar dados da turma.');
         }
     } catch (error) {
-        document.getElementById('main').innerHTML = `<div class="alert alert-danger m-5">${error.message}</div>`;
+        document.getElementById('main').innerHTML = 
+            `<div class="alert alert-danger m-5">${error.message}</div>`;
     }
 }
 
+// Função para renderizar a turma e os vídeos
 function renderClassroom(data) {
+    if (!data || !data.classDetails) {
+        document.getElementById('main').innerHTML =
+            `<div class="alert alert-warning m-5">Nenhum detalhe da turma disponível.</div>`;
+        return;
+    }
+
     // Atualiza os títulos
-    document.getElementById('classroom-title').textContent = data.classDetails.className;
-    document.getElementById('classroom-subtitle').textContent = `Curso de ${data.classDetails.courseName}`;
+    document.getElementById('classroom-title').textContent = data.classDetails.className || 'Turma sem nome';
+    document.getElementById('classroom-subtitle').textContent = `Curso de ${data.classDetails.courseName || ''}`;
 
     // Renderiza a lista de vídeos
     const videoList = document.getElementById('video-list');
-    if (data.videos.length === 0) {
+    if (!data.videos || data.videos.length === 0) {
         videoList.innerHTML = '<p>Nenhuma aula gravada disponível no momento.</p>';
         return;
     }
