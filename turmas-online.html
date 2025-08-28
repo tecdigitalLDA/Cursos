@@ -11,14 +11,7 @@
 <body class="is-preload">
     <div id="wrapper" class="fade-in">
         <header id="header"><a href="index.html" class="logo">TecDigital</a></header>
-        <nav id="nav">
-            <ul class="links">
-                <li><a href="index.html">Home</a></li>
-                <li class="active"><a href="turmas-online.html">Turmas Online</a></li>
-                <li><a href="consulta.html">Consultar Inscrição</a></li>
-                <li><a href="somostecdigital.html">Quem Somos</a></li>
-            </ul>
-        </nav>
+        <nav id="nav"></nav>
 
         <div id="main">
             <article class="post featured">
@@ -26,36 +19,99 @@
                     <h2>Turmas Online Disponíveis</h2>
                     <p>Escolha a sua turma e comece a sua jornada de aprendizagem connosco.</p>
                 </header>
-                <section id="class-list" class="posts">
-                    <p>A carregar turmas disponíveis...</p>
-                </section>
+                <section id="class-list" class="posts"><p>A carregar turmas...</p></section>
             </article>
         </div>
 
-        <footer id="footer"></footer>
-        <div id="copyright"><ul><li>&copy; TecDigital Sul LDA</li></ul></div>
+        <!-- Footer -->
+          <footer id="footer">
+            <section>
+                <formid="contactForm" method="post" action="#">
+                    <div class="fields">
+                        <div class="field">
+                            <label for="name">Nome</label>
+                            <input type="text" name="name" id="name" />
+                        </div>
+                        <div class="field">
+                            <label for="email">Email</label>
+                            <input type="text" name="email" id="email" />
+                        </div>
+                        <div class="field">
+                            <label for="message">Mensagem</label>
+                            <textarea name="message" id="message" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <ul class="actions">
+                        <li><input type="submit" value="Send Message" /></li>
+                    </ul>
+                </form>
+            </section>
+            <section class="split contact">
+                <section class="alt">
+                    <h3>Localização</h3><br />
+                    <p>Huambo, Largo Wassanjuca<br />
+                        atrás da Clínca Medisafe</p>
+                </section>
+                <section>
+                    <h3>Telefone</h3>
+                    <p><a href="#">(+244) 936 065 155</a></p>
+                </section>
+                <section>
+                    <h3>Email</h3>
+                    <p><a href="#">tecdigital61@gmail.com</a></p>
+                </section>
+                <section>
+                    <h3>Redes Socias</h3>
+                    <ul class="icons alt">
+                        <li><a href="https://www.linkedin.com/in/tec-digital-3b6370263/"
+                                class="icon brands alt fa-linkedin"><span class="label">Linkedin</span></a></li>
+                        <li><a href="https://www.facebook.com/p/Tec-Digital-SU-LDA-100087834732969/"
+                                class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+                        <li><a href="https://www.instagram.com/tecdigitalsulda/"
+                                class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
+                        <li><a href="https://github.com/tecdigitalLDA" class="icon brands alt fa-github"><span
+                                        class="label">GitHub</span></a></li>
+                    </ul>
+                </section>
+            </section>
+        </footer>
+
+		<!-- Copyright -->		
+        <div id="copyright">
+            <ul>
+                <li>&copy; Todos os direitos reservados</li>
+                <li> <a href="https://www.facebook.com/p/Tec-Digital-SU-LDA-100087834732969/">TecDigital Sul LDA</a></li>
+            </ul>
+        </div>
     </div>
 
     <div class="modal fade" id="onlineRegistrationModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modal-title">Inscrição</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
+                <div class="modal-header"><h5 class="modal-title" id="modal-title">Inscrição</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#google-tab-pane" type="button">Login com Google (Rápido)</button></li>
-                        <li class="nav-item" role="presentation"><button class="nav-link" id="manual-tab-button" data-bs-toggle="tab" data-bs-target="#manual-tab-pane" type="button">Inscrição Manual</button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#google-tab-pane">Login com Google (Rápido)</button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#manual-tab-pane">Inscrição Manual</button></li>
                     </ul>
                     <div class="tab-content p-3 border border-top-0">
                         <div class="tab-pane fade show active" id="google-tab-pane">
-                            <div id="g_id_onload" data-client_id="O_SEU_ID_DE_CLIENTE_VAI_AQUI" data-callback="handleCredentialResponse"></div>
+                            <div id="g_id_onload" data-client_id="761082741101-5f5gu6vmha9crcpb4bnadcnjjus799sb.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div>
                             <div class="g_id_signin" data-type="standard"></div>
                             <div id="google-status-message" class="mt-3 text-center"></div>
                         </div>
                         <div class="tab-pane fade" id="manual-tab-pane">
-                            <div id="manual-form-container"></div>
+                            <form id="manual-online-form">
+                                <div class="row g-3">
+                                    <div class="col-sm-6"><label for="online-firstName" class="form-label">Nome</label><input type="text" class="form-control" id="online-firstName" required></div>
+                                    <div class="col-sm-6"><label for="online-lastName" class="form-label">Sobrenome</label><input type="text" class="form-control" id="online-lastName" required></div>
+                                    <div class="col-12"><label for="online-email" class="form-label">Email</label><input type="email" class="form-control" id="online-email" required></div>
+                                    <div class="col-12"><label for="online-phone" class="form-label">Nº Telefone</label><input type="tel" class="form-control" id="online-phone" required></div>
+                                </div>
+                                <hr class="my-4">
+                                <button class="w-100 btn btn-primary" type="submit" id="manual-submit-btn">Concluir Inscrição</button>
+                            </form>
+                            <div id="manual-status-message" class="mt-3"></div>
                         </div>
                     </div>
                 </div>
@@ -67,88 +123,138 @@
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/main.js"></script>
+    
     <script>
-        const webAppUrl = 'https://script.google.com/macros/s/AKfycbxyHnW6rIT1lJ9dPBqnvKYZQ3KZ0IHZV_e_3g4dtgI98cyu8X7cbxrlOozF3o1srf8fyg/exec'; // URL da API PÚBLICA
-        const modalElement = document.getElementById('onlineRegistrationModal');
-        const onlineRegistrationModal = new bootstrap.Modal(modalElement);
+    // ***** IMPORTANTE: Insira aqui o seu URL da API Pública *****
+    const webAppUrl = 'https://script.google.com/macros/s/AKfycbxyHnW6rIT1lJ9dPBqnvKYZQ3KZ0IHZV_e_3g4dtgI98cyu8X7cbxrlOozF3o1srf8fyg/exec';
 
-        function openRegistrationModal(classId, className) {
-            document.getElementById('modal-title').textContent = `Inscrição: ${className}`;
-            modalElement.dataset.classId = classId;
-            onlineRegistrationModal.show();
-        }
+    const modalElement = document.getElementById('onlineRegistrationModal');
+    const onlineRegistrationModal = new bootstrap.Modal(modalElement);
 
-        // Carrega o formulário manual dinamicamente
-        document.getElementById('manual-tab-button').addEventListener('click', () => {
-            const container = document.getElementById('manual-form-container');
-            if (container.innerHTML === '') {
-                container.innerHTML = 'A carregar formulário...';
-                fetch('ins-curso/inscricao.html')
-                    .then(res => res.text())
-                    .then(html => {
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(html, 'text/html');
-                        const form = doc.querySelector('form');
-                        const scriptContent = doc.querySelector('script').innerHTML;
-                        container.innerHTML = '';
-                        container.appendChild(form);
-                        const newScript = document.createElement('script');
-                        newScript.innerHTML = scriptContent;
-                        document.body.appendChild(newScript);
-                    });
-            }
-        });
-        
-        // Lógica do Login com Google
-        async function handleCredentialResponse(response) {
-            const statusDiv = document.getElementById('google-status-message');
-            statusDiv.innerHTML = 'A processar...';
-            const decodedToken = JSON.parse(atob(response.credential.split('.')[1]));
-            const payload = {
-                action: 'registerOnlineStudent',
-                payload: {
-                    classId: modalElement.dataset.classId,
-                    studentInfo: { email: decodedToken.email, name: decodedToken.name, given_name: decodedToken.given_name, family_name: decodedToken.family_name }
+    /**
+     * Abre o popup de inscrição e passa os dados da turma selecionada.
+     */
+    function openRegistrationModal(classId, className) {
+        document.getElementById('modal-title').textContent = `Inscrição: ${className}`;
+        // Guarda os dados da turma no próprio elemento do modal para uso posterior
+        modalElement.dataset.classId = classId;
+        modalElement.dataset.className = className;
+        onlineRegistrationModal.show();
+    }
+
+    // --- LÓGICA DO FORMULÁRIO MANUAL ONLINE ---
+    document.getElementById('manual-online-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const statusDiv = document.getElementById('manual-status-message');
+        const submitButton = document.getElementById('manual-submit-btn');
+        statusDiv.innerHTML = 'A processar inscrição...';
+        submitButton.disabled = true;
+
+        const payload = {
+            action: 'registerManualOnlineStudent',
+            payload: {
+                classId: modalElement.dataset.classId, // Pega o ID da turma guardado no modal
+                studentInfo: {
+                    firstName: document.getElementById('online-firstName').value,
+                    lastName: document.getElementById('online-lastName').value,
+                    email: document.getElementById('online-email').value,
+                    phoneNumber: document.getElementById('online-phone').value,
                 }
-            };
-            try {
-                const res = await fetch(webAppUrl, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' }, mode: 'cors' });
-                const result = await res.json();
-                if (result.status === 'success') {
-                    statusDiv.innerHTML = `<div class="alert alert-success">${result.message}</div>`;
-                    setTimeout(() => onlineRegistrationModal.hide(), 4000);
-                } else { throw new Error(result.message); }
-            } catch (error) {
-                statusDiv.innerHTML = `<div class="alert alert-danger">${error.message}</div>`;
             }
+        };
+
+        try {
+            const res = await fetch(webAppUrl, {
+                method: 'POST',
+                body: JSON.stringify(payload),
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                mode: 'cors'
+            });
+            const result = await res.json();
+            if (result.status === 'success') {
+                statusDiv.innerHTML = `<div class="alert alert-success">${result.message}</div>`;
+                e.target.reset(); // Limpa o formulário
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (error) {
+            statusDiv.innerHTML = `<div class="alert alert-danger">${error.message}</div>`;
+        } finally {
+            submitButton.disabled = false;
         }
+    });
+
+    // --- LÓGICA DO LOGIN COM GOOGLE ---
+    async function handleCredentialResponse(response) {
+        const statusDiv = document.getElementById('google-status-message');
+        statusDiv.innerHTML = 'A processar inscrição...';
         
-        // Lógica para carregar a lista de turmas (igual à anterior)
-        document.addEventListener('DOMContentLoaded', async function() {
-            const classListContainer = document.getElementById('class-list');
-            try {
-                const response = await fetch(`${webAppUrl}?action=getOnlineClasses`);
-                const result = await response.json();
-                if (result.status === 'success' && result.data.length > 0) {
-                    classListContainer.innerHTML = '';
-                    result.data.forEach(turma => {
-                        const article = document.createElement('article');
-                        article.innerHTML = `
-                            <header><span class="date">${turma.course}</span><h2><a href="#">${turma.name}</a></h2></header>
-                            <a href="#" class="image fit"><img src="images/pic02.jpg" alt="" /></a>
-                            <p>Inscrições abertas para esta turma online. Vagas limitadas.</p>
-                            <ul class="actions special">
-                                <li><button class="button" onclick="openRegistrationModal('${turma.id}', '${turma.name}')">Inscrever-me</button></li>
-                            </ul>`;
-                        classListContainer.appendChild(article);
-                    });
-                } else {
-                     classListContainer.innerHTML = '<p>De momento, não há turmas online com inscrições abertas.</p>';
+        const decodedToken = JSON.parse(atob(response.credential.split('.')[1]));
+        
+        const payload = {
+            action: 'registerOnlineStudent',
+            payload: {
+                classId: modalElement.dataset.classId, // Pega o ID da turma guardado no modal
+                studentInfo: {
+                    email: decodedToken.email,
+                    name: decodedToken.name,
+                    given_name: decodedToken.given_name,
+                    family_name: decodedToken.family_name
                 }
-            } catch (error) {
-                classListContainer.innerHTML = `<p style="color: red;"><strong>Erro:</strong> Não foi possível carregar a lista de turmas.</p>`;
             }
-        });
-    </script>
+        };
+
+        try {
+            const res = await fetch(webAppUrl, {
+                method: 'POST',
+                body: JSON.stringify(payload),
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                mode: 'cors'
+            });
+
+            const result = await res.json();
+            if (result.status === 'success') {
+                statusDiv.innerHTML = `<div class="alert alert-success mt-3">${result.message}</div>`;
+                setTimeout(() => onlineRegistrationModal.hide(), 4000);
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (error) {
+            statusDiv.innerHTML = `<div class="alert alert-danger mt-3">${error.message}</div>`;
+        }
+    }
+    
+    // --- LÓGICA PARA CARREGAR A LISTA DE TURMAS QUANDO A PÁGINA ABRE ---
+    document.addEventListener('DOMContentLoaded', async function() {
+        const classListContainer = document.getElementById('class-list');
+        try {
+            const response = await fetch(`${webAppUrl}?action=getOnlineClasses`);
+            const result = await response.json();
+
+            if (result.status === 'success' && result.data.length > 0) {
+                classListContainer.innerHTML = '';
+                result.data.forEach(turma => {
+                    const article = document.createElement('article');
+                    article.innerHTML = `
+                        <header>
+                            <span class="date">${turma.course}</span>
+                            <h2><a href="#">${turma.name}</a></h2>
+                        </header>
+                        <a href="#" class="image fit"><img src="images/pic02.jpg" alt="" /></a>
+                        <p>Inscrições abertas para esta turma online. Vagas limitadas.</p>
+                        <ul class="actions special">
+                            <li><button class="button" onclick="openRegistrationModal('${turma.id}', '${turma.name}')">Inscrever-me</button></li>
+                        </ul>`;
+                    classListContainer.appendChild(article);
+                });
+            } else {
+                 classListContainer.innerHTML = '<p>De momento, não há turmas online com inscrições abertas. Volte em breve!</p>';
+            }
+        } catch (error) {
+            classListContainer.innerHTML = `<p style="color: red;"><strong>Erro:</strong> Não foi possível carregar a lista de turmas.</p>`;
+        }
+    });
+</script>
+
 </body>
 </html>
