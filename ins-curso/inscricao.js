@@ -63,30 +63,41 @@ function readFileAsBase64(file) {
 }
 
 // Ficheiro: ins-curso/inscricao.js
-// Ação: Substitua a função handleFormSubmit
+// Ficheiro: ins-curso/inscricao.js
+// Ação: Substitua toda a sua função handleFormSubmit por esta
+
 async function handleFormSubmit(e) {
     e.preventDefault();
+
     const submitButton = document.getElementById('submitButton');
     const spinner = document.getElementById('spinner');
+    // Certifique-se de que os seus divs de alerta no inscricao.html têm estes IDs
     const alertSuccess = document.getElementById('alert-sucesso');
     const alertFail = document.getElementById('alert-falha');
     
-    alertSuccess.style.display = 'none';
-    alertFail.style.display = 'none';
-    spinner.style.display = 'inline-block';
-    submitButton.disabled = true;
+    // Esconde as mensagens antigas e mostra o spinner
+    if(alertSuccess) alertSuccess.style.display = 'none';
+    if(alertFail) alertFail.style.display = 'none';
+    if(spinner) spinner.style.display = 'inline-block';
+    if(submitButton) submitButton.disabled = true;
 
     try {
+        // Certifique-se de que a sua URL está correta aqui
         const webAppUrl = 'https://script.google.com/macros/s/AKfycbxyHnW6rIT1lJ9dPBqnvKYZQ3KZ0IHZV_e_3g4dtgI98cyu8X7cbxrlOozF3o1srf8fyg/exec';
+
         const urlParams = new URLSearchParams(window.location.search);
         const courseName = urlParams.get('course') || 'Curso não especificado';
+
         const idFile = document.getElementById('identityDocument').files[0];
         const paymentFile = document.getElementById('paymentProof').files[0];
+
+        // Espera que os dois ficheiros sejam lidos e convertidos
         const [idFileData, paymentFileData] = await Promise.all([
             readFileAsBase64(idFile),
             readFileAsBase64(paymentFile)
         ]);
 
+        // Cria o payload com os dados do aluno
         const studentPayload = {
             courseName: courseName,
             firstName: document.getElementById('firstName').value,
@@ -100,6 +111,7 @@ async function handleFormSubmit(e) {
             paymentProof: paymentFileData
         };
         
+        // Cria o payload final com a "action" que o backend espera
         const finalPayload = {
             action: 'handlePublicInscription',
             payload: studentPayload
@@ -108,25 +120,46 @@ async function handleFormSubmit(e) {
         const response = await fetch(webAppUrl, {
             method: 'POST',
             body: JSON.stringify(finalPayload),
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            mode: 'cors'
         });
         
         if (!response.ok) {
             throw new Error(`O servidor respondeu com um erro: ${response.statusText}`);
         }
-        const result = await response.json();
+
+        const result = await response.json(); // Esta linha agora não deve dar erro
+
         if (result.status === 'success') {
-            alertSuccess.innerHTML = `<strong>Sucesso!</strong> ${result.message} <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`;
-            alertSuccess.style.display = 'block';
-            document.getElementById('registrationForm').reset();
+            if(alertSuccess) {
+                alertSuccess.innerHTML = `<strong>Sucesso!</strong> ${result.message} <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`;
+                alertSuccess.style.display = 'block';
+            }
+            if(form) {
+                form.reset();
+                form.classList.remove('was-validated');
+            }
+            if(municipalitySelect) municipalitySelect.disabled = true;
+
+            // Envia a mensagem para a página principal fechar o modal
+            setTimeout(() => {
+                window.parent.postMessage('closeModal', '*');
+            }, 5000);
+
         } else {
             throw new Error(result.message);
         }
+
     } catch (error) {
-        alertFail.innerHTML = `<strong>Erro!</strong> ${error.message} <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`;
-        alertFail.style.display = 'block';
+        console.error('Erro no processo de inscrição:', error);
+        if(alertFail) {
+            alertFail.innerHTML = `<strong>Erro!</strong> ${error.message} <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`;
+            alertFail.style.display = 'block';
+        }
+        
     } finally {
-        spinner.style.display = 'none';
-        submitButton.disabled = false;
+        // Garante que o botão volta ao normal, quer haja sucesso ou erro
+        if(spinner) spinner.style.display = 'none';
+        if(submitButton) submitButton.disabled = false;
     }
 }
