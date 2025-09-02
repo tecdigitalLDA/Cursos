@@ -14,7 +14,6 @@
 		<header id="header">
 			<a href="index.html" class="logo">TecDigital</a>
 		</header>
-
 		<!-- Nav -->
 		<nav id="nav">
 			<ul class="links">
@@ -44,127 +43,186 @@
             </article>
         </div>
 
-      
-    </div>
+         <div id="g_id_onload"
+            data-client_id="761082741101-5f5gu6vmha9crcpb4bnadcnjjus799sb.apps.googleusercontent.com"
+            data-callback="handleStudentLogin"
+            data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin" data-type="standard" style="display: none;"></div>
 
-    <div id="g_id_onload"
-         data-client_id="761082741101-5f5gu6vmha9crcpb4bnadcnjjus799sb.apps.googleusercontent.com"
-         data-callback="handleStudentLogin"
-         data-auto_prompt="false">
+        <!-- Footer -->
+          <footer id="footer">
+            <section>
+                <formid="contactForm" method="post" action="#">
+                    <div class="fields">
+                        <div class="field">
+                            <label for="name">Nome</label>
+                            <input type="text" name="name" id="name" />
+                        </div>
+                        <div class="field">
+                            <label for="email">Email</label>
+                            <input type="text" name="email" id="email" />
+                        </div>
+                        <div class="field">
+                            <label for="message">Mensagem</label>
+                            <textarea name="message" id="message" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <ul class="actions">
+                        <li><input type="submit" value="Send Message" /></li>
+                    </ul>
+                </form>
+            </section>
+            <section class="split contact">
+                <section class="alt">
+                    <h3>Localização</h3><br />
+                    <p>Huambo, Largo Wassanjuca<br />
+                        atrás da Clínca Medisafe</p>
+                </section>
+                <section>
+                    <h3>Telefone</h3>
+                    <p><a href="#">(+244) 936 065 155</a></p>
+                </section>
+                <section>
+                    <h3>Email</h3>
+                    <p><a href="#">tecdigital61@gmail.com</a></p>
+                </section>
+                <section>
+                    <h3>Redes Socias</h3>
+                    <ul class="icons alt">
+                        <li><a href="https://www.linkedin.com/in/tec-digital-3b6370263/"
+                                class="icon brands alt fa-linkedin"><span class="label">Linkedin</span></a></li>
+                        <li><a href="https://www.facebook.com/p/Tec-Digital-SU-LDA-100087834732969/"
+                                class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+                        <li><a href="https://www.instagram.com/tecdigitalsulda/"
+                                class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
+                        <li><a href="https://github.com/tecdigitalLDA" class="icon brands alt fa-github"><span
+                                        class="label">GitHub</span></a></li>
+                    </ul>
+                </section>
+            </section>
+        </footer>
+
+		<!-- Copyright -->		
+        <div id="copyright">
+            <ul>
+                <li>&copy; Todos os direitos reservados</li>
+                <li> <a href="https://www.facebook.com/p/Tec-Digital-SU-LDA-100087834732969/">TecDigital Sul LDA</a></li>
+            </ul>
+        </div>
     </div>
-    <div class="g_id_signin" data-type="standard" style="display: none;"></div>
 
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/main.js"></script>
   
     <script>
-    // ***** IMPORTANTE: Insira aqui o seu URL da API Pública *****
-    const webAppUrl = 'https://script.google.com/macros/s/AKfycbzAw3fdX_hb9i9G7xVihx3mb6Rs70Ix81lNGOg3wTmG8btm_rajmCCSCCsaTn0U145t/exec';
-    
-    let targetClassId = null; // Variável para guardar a turma em que o aluno quer entrar
-    
-    // --- LÓGICA DO MODAL (POPUP) ---
-    const modalElement = document.getElementById('onlineRegistrationModal');
-    const onlineRegistrationModal = new bootstrap.Modal(modalElement);
+        // ***** IMPORTANTE: Insira aqui o seu URL da API Pública *****
+        const webAppUrl = 'https://script.google.com/macros/s/AKfycbzAw3fdX_hb9i9G7xVihx3mb6Rs70Ix81lNGOg3wTmG8btm_rajmCCSCCsaTn0U145t/exec';
+        
+        let targetClassId = null; // Variável para guardar a turma em que o aluno quer entrar
+        
+        // --- LÓGICA DO MODAL (POPUP) ---
+        const modalElement = document.getElementById('onlineRegistrationModal');
+        const onlineRegistrationModal = new bootstrap.Modal(modalElement);
 
-    /**
-     * Esta função é chamada pelo botão "Inscrever-me".
-     * Abre o popup de inscrição e passa os dados da turma.
-     */
-    function openRegistrationModal(classId, className) {
-        document.getElementById('modal-title').textContent = `Inscrição: ${className}`;
-        modalElement.dataset.classId = classId; // Guarda os dados da turma no próprio modal
-        modalElement.dataset.className = className;
-        onlineRegistrationModal.show();
-    }
-
-    /**
-     * Esta função é chamada pelo botão "Iniciar Sessão".
-     * Inicia o processo de login com Google.
-     */
-    function initiateStudentLogin(classId) {
-        targetClassId = classId;
-        const statusDiv = document.getElementById('login-status-container');
-        statusDiv.innerHTML = `<p class="text-center">A iniciar sessão com o Google...</p>`;
-        google.accounts.id.prompt(); // Pede ao Google para mostrar o popup de seleção de conta
-    }
-
-    /**
-     * Esta função é chamada pelo Google após um login bem-sucedido.
-     */
-    async function handleStudentLogin(response) {
-        // ... (o conteúdo desta função permanece o mesmo da versão anterior)
-        const statusDiv = document.getElementById('login-status-container');
-        statusDiv.innerHTML = '<p class="text-center">A verificar acesso...</p>';
-        if (!targetClassId) {
-            statusDiv.innerHTML = `<div class="alert alert-danger">Erro: Nenhuma turma foi selecionada.</div>`;
-            return;
+        /**
+         * Esta função é chamada pelo botão "Inscrever-me".
+         * Abre o popup de inscrição e passa os dados da turma.
+         */
+        function openRegistrationModal(classId, className) {
+            document.getElementById('modal-title').textContent = `Inscrição: ${className}`;
+            modalElement.dataset.classId = classId; // Guarda os dados da turma no próprio modal
+            modalElement.dataset.className = className;
+            onlineRegistrationModal.show();
         }
-        const decodedToken = JSON.parse(atob(response.credential.split('.')[1]));
-        const studentEmail = decodedToken.email;
-        try {
-            const res = await fetch(webAppUrl, {
-                method: 'POST',
-                body: JSON.stringify({ action: 'verifyAccess', payload: { email: studentEmail } }),
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                mode: 'cors'
-            });
-            const result = await res.json();
-            if (result.status === 'success' && result.data.length > 0) {
-                const hasAccessToTargetClass = result.data.some(c => c.classId === targetClassId);
-                if (hasAccessToTargetClass) {
-                    statusDiv.innerHTML = `<div class="alert alert-success">Acesso concedido! A redirecionar...</div>`;
-                    sessionStorage.setItem('googleUserToken', response.credential);
-                    sessionStorage.setItem('studentName', decodedToken.name);
-                    window.location.href = `sala-aula.html?classId=${targetClassId}`;
-                } else {
-                    throw new Error("Você não está inscrito(a) nesta turma específica.");
-                }
-            } else {
-                throw new Error(result.message);
+
+        /**
+         * Esta função é chamada pelo botão "Iniciar Sessão".
+         * Inicia o processo de login com Google.
+         */
+        function initiateStudentLogin(classId) {
+            targetClassId = classId;
+            const statusDiv = document.getElementById('login-status-container');
+            statusDiv.innerHTML = `<p class="text-center">A iniciar sessão com o Google...</p>`;
+            google.accounts.id.prompt(); // Pede ao Google para mostrar o popup de seleção de conta
+        }
+
+        /**
+         * Esta função é chamada pelo Google após um login bem-sucedido.
+         */
+        async function handleStudentLogin(response) {
+            // ... (o conteúdo desta função permanece o mesmo da versão anterior)
+            const statusDiv = document.getElementById('login-status-container');
+            statusDiv.innerHTML = '<p class="text-center">A verificar acesso...</p>';
+            if (!targetClassId) {
+                statusDiv.innerHTML = `<div class="alert alert-danger">Erro: Nenhuma turma foi selecionada.</div>`;
+                return;
             }
-        } catch (error) {
-            statusDiv.innerHTML = `<div class="alert alert-danger"><strong>Erro:</strong> ${error.message}</div>`;
-        }
-    }
-
-    /**
-     * Carrega a lista de turmas quando a página abre.
-     */
-    document.addEventListener('DOMContentLoaded', async function() {
-        const classListContainer = document.getElementById('class-list');
-        try {
-            const response = await fetch(`${webAppUrl}?action=getOnlineClasses`);
-            const result = await response.json();
-
-            if (result.status === 'success' && result.data.length > 0) {
-                classListContainer.innerHTML = '';
-                result.data.forEach(turma => {
-                    const article = document.createElement('article');
-                    // ---> CORREÇÃO PRINCIPAL AQUI <---
-                    // Agora criamos os DOIS botões
-                    article.innerHTML = `
-                        <header>
-                            <span class="date">${turma.course}</span>
-                            <h2><a href="#">${turma.name}</a></h2>
-                        </header>
-                        <a href="#" class="image fit"><img src="images/pic02.jpg" alt="" /></a>
-                        <p>Inscrições abertas para esta turma online. Vagas limitadas.</p>
-                        <ul class="actions special">
-                            <li><button class="button" onclick="openRegistrationModal('${turma.id}', '${turma.name}')">Inscrever-me</button></li>
-                            <li><button class="button primary" onclick="initiateStudentLogin('${turma.id}')">Iniciar Sessão</button></li>
-                        </ul>`;
-                    classListContainer.appendChild(article);
+            const decodedToken = JSON.parse(atob(response.credential.split('.')[1]));
+            const studentEmail = decodedToken.email;
+            try {
+                const res = await fetch(webAppUrl, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'verifyAccess', payload: { email: studentEmail } }),
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    mode: 'cors'
                 });
-            } else {
-                 classListContainer.innerHTML = '<p>De momento, não há turmas online com inscrições abertas.</p>';
+                const result = await res.json();
+                if (result.status === 'success' && result.data.length > 0) {
+                    const hasAccessToTargetClass = result.data.some(c => c.classId === targetClassId);
+                    if (hasAccessToTargetClass) {
+                        statusDiv.innerHTML = `<div class="alert alert-success">Acesso concedido! A redirecionar...</div>`;
+                        sessionStorage.setItem('googleUserToken', response.credential);
+                        sessionStorage.setItem('studentName', decodedToken.name);
+                        window.location.href = `sala-aula.html?classId=${targetClassId}`;
+                    } else {
+                        throw new Error("Você não está inscrito(a) nesta turma específica.");
+                    }
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `<div class="alert alert-danger"><strong>Erro:</strong> ${error.message}</div>`;
             }
-        } catch (error) {
-            classListContainer.innerHTML = `<p style="color: red;"><strong>Erro:</strong> Não foi possível carregar a lista de turmas.</p>`;
         }
-    });
-</script>
+
+        /**
+         * Carrega a lista de turmas quando a página abre.
+         */
+        document.addEventListener('DOMContentLoaded', async function() {
+            const classListContainer = document.getElementById('class-list');
+            try {
+                const response = await fetch(`${webAppUrl}?action=getOnlineClasses`);
+                const result = await response.json();
+
+                if (result.status === 'success' && result.data.length > 0) {
+                    classListContainer.innerHTML = '';
+                    result.data.forEach(turma => {
+                        const article = document.createElement('article');
+                        // ---> CORREÇÃO PRINCIPAL AQUI <---
+                        // Agora criamos os DOIS botões
+                        article.innerHTML = `
+                            <header>
+                                <span class="date">${turma.course}</span>
+                                <h2><a href="#">${turma.name}</a></h2>
+                            </header>
+                            <a href="#" class="image fit"><img src="images/pic02.jpg" alt="" /></a>
+                            <p>Inscrições abertas para esta turma online. Vagas limitadas.</p>
+                            <ul class="actions special">
+                                <li><button class="button" onclick="openRegistrationModal('${turma.id}', '${turma.name}')">Inscrever-me</button></li>
+                                <li><button class="button primary" onclick="initiateStudentLogin('${turma.id}')">Iniciar Sessão</button></li>
+                            </ul>`;
+                        classListContainer.appendChild(article);
+                    });
+                } else {
+                    classListContainer.innerHTML = '<p>De momento, não há turmas online com inscrições abertas.</p>';
+                }
+            } catch (error) {
+                classListContainer.innerHTML = `<p style="color: red;"><strong>Erro:</strong> Não foi possível carregar a lista de turmas.</p>`;
+            }
+        });
+    </script>
 
 </body>
 </html>
