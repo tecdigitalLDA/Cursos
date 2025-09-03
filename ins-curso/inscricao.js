@@ -83,7 +83,7 @@ async function handleFormSubmit(e) {
 
     try {
         // Certifique-se de que a sua URL está correta aqui
-        const webAppUrl = 'https://script.google.com/macros/s/AKfycbzAw3fdX_hb9i9G7xVihx3mb6Rs70Ix81lNGOg3wTmG8btm_rajmCCSCCsaTn0U145t/exec';
+        const webAppUrl = 'https://script.google.com/macros/s/AKfycbyIFBHa6qydD9JsYw5J1109wQhDjiTZoHb2UOlE-Ebbu14TF7NQPr0Z8tNqRHSATSdD0A/exec';
 
         const urlParams = new URLSearchParams(window.location.search);
         const courseName = urlParams.get('course') || 'Curso não especificado';
